@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
+import LandingScreen from "./screens/LandingScreen";
 import CalculatorScreen from "./screens/CalculatorScreen";
 import HistoryScreen from "./screens/HistoryScreen";
 import { NavigationContainer } from "@react-navigation/native";
@@ -18,6 +19,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={navStyling}>
+        <Stack.Screen name="Home" component={LandingScreen} />
         <Stack.Screen name="Geo Calculator" component={CalculatorScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="History" component={HistoryScreen} />
