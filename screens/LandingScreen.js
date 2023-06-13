@@ -10,6 +10,7 @@ const LandingScreen = () => {
   };
 
   const handleLoginPress = () => {
+    navigation.navigate('Login');
   };
 
   return (
