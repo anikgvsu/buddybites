@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
 const LandingScreen = () => {
-  const handleSignInPress = () => {
+  const handleSignUpPress = () => {
   };
 
   const handleLoginPress = () => {
@@ -13,8 +13,8 @@ const LandingScreen = () => {
       <View style={styles.background} />
       <View style={styles.content}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleSignInPress}>
-            <Text style={styles.buttonText}>Sign In</Text>
+          <TouchableOpacity style={styles.button} onPress={handleSignUpPress}>
+            <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
             <Text style={styles.buttonText}>Login</Text>
