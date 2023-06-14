@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
+
+import {
+  initUserDB,
+  setupUserListener,
+  storeUserItem,
+} from "../helpers/fb-user";
 
 const SignUpScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -10,8 +16,23 @@ const SignUpScreen = ({ navigation }) => {
   const [favoriteFoods, setFavoriteFoods] = useState('');
   const [dietHabit, setDietHabit] = useState('');
 
+  const[user, setUser] = useState('');
+
+  useEffect(() => {
+    try {
+      initUserDB();
+    } catch (err) {
+      console.log(err);
+    }
+    setupUserListener((items) => {
+      setUser(items);
+    });
+  }, []);
+
   const handleSignUp = () => {
-    navigation.navigate('Home');
+    
+    storeUserItem({ name: name, username: username, password: password, phone: phone, allergy: allergy, favoriteFoods: favoriteFoods, dietHabit: dietHabit });
+    navigation.navigate('EventList');
   };
 
   return (
