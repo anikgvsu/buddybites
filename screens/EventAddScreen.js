@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import SearchableDropdown from 'react-native-searchable-dropdown';
+import SelectDropdown from 'react-native-select-dropdown'
 
 const EventAddScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
   const [guestList, setGuestList] = useState([]);
+
+  const options = [
+    { 
+      value: 1,
+      label: "Leanne Graham"
+    },
+    {
+      value:  2,
+      label: "Ervin Howell"
+    }
+  ];
 
   const handleSaveEvent = () => {
   };
@@ -31,39 +42,25 @@ const EventAddScreen = ({ navigation }) => {
         value={location}
         onChangeText={setLocation}
       />
-      <SearchableDropdown
-        multi={true}
-        selectedItems={guestList}
-        onItemSelect={(item) => {
-          const selectedGuests = [...guestList];
-          selectedGuests.push(item);
-          setGuestList(selectedGuests);
-        }}
-        containerStyle={styles.dropdownContainer}
-        onRemoveItem={(item, index) => {
-          const updatedGuests = [...guestList];
-          updatedGuests.splice(index, 1);
-          setGuestList(updatedGuests);
-        }}
-        itemStyle={styles.dropdownItem}
-        itemTextStyle={styles.dropdownItemText}
-        itemsContainerStyle={styles.dropdownItemsContainer}
-        items={[
-          { id: 1, name: 'John' },
-          { id: 2, name: 'Jane' },
-          { id: 3, name: 'Mark' },
+      <View>
+      <SelectDropdown
+        data={[
+          'John',
+          'Jane',
+          'Mark',
         ]}
-        defaultIndex={-1}
-        placeholder="Guest List"
-        resetValue={false}
-        textInputProps={{
-          editable: false,
-          placeholderTextColor: '#333',
-        }}
-        listProps={{
-          nestedScrollEnabled: true,
-        }}
+        multiSelect
+        defaultButtonText="Guest List"
+        buttonStyle={styles.dropdownButton}
+        buttonTextStyle={styles.dropdownButtonText}
+        dropdownStyle={styles.dropdownContainer}
+        rowStyle={styles.dropdownItem}
+        rowTextStyle={styles.dropdownItemText}
+        dropdownIconPosition="right"
+        onSelect={(selectedItems) => setGuestList(selectedItems)}
       />
+      </View>
+      
       <TouchableOpacity style={styles.button} onPress={handleSaveEvent}>
         <Text style={styles.buttonText}>Save Event</Text>
       </TouchableOpacity>
