@@ -57,11 +57,11 @@ const EventAddScreen = ({ navigation }) => {
       setTitleError('Title is required');
     }
   
-    if (date.trim() === '') {
+    if (dateError) {
       setDateError('Date is required');
     }
   
-    if (location.trim() === '') {
+    if (locationError) {
       setLocationError('Location is required');
     }
 

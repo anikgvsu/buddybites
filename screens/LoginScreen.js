@@ -3,12 +3,35 @@ import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-nativ
 
 const LoginScreen = ({ navigation }) => {
   const [phone, setPhone] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
 
   const handleLogin = () => {
+    setPhoneError('');
+    setPasswordError('');
 
-    navigation.navigate('EventList');
+    const phoneError = phone.trim() === '';
+    const passwordError = password.trim() === '';
+  
+    if (phoneError) {
+      setPhoneError('Phone is required');
+    }
+  
+    if (passwordError) {
+      setPasswordError('Password is required');
+    }
+  
+    if (
+      !phoneError &&
+      !passwordError 
+    ) {
+
+      navigation.navigate('EventList');
+    }
   };
+  
 
   return (
     <View style={styles.container}>
@@ -18,6 +41,8 @@ const LoginScreen = ({ navigation }) => {
         value={phone}
         onChangeText={setPhone}
       />
+      {phoneError ? <Text style={styles.error}>{phoneError}</Text> : null}
+
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -25,6 +50,8 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
+      {passwordError ? <Text style={styles.error}>{passwordError}</Text> : null}
+
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
@@ -56,6 +83,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+
+  error: {
+    color: 'red',
+    fontSize: 16,
+    marginBottom: 10,
   },
 });
 
