@@ -16,7 +16,7 @@ const SignUpScreen = ({ navigation }) => {
   const [favoriteFoods, setFavoriteFoods] = useState('');
   const [dietHabit, setDietHabit] = useState('');
 
-  const[user, setUser] = useState('');
+  const[user, setUser] = useState([]);
 
   useEffect(() => {
     try {

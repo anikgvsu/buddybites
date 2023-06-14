@@ -1,12 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown'
+
+import {
+  initEventDB,
+  setupEventListener,
+  storeEventItem,
+} from "../helpers/fb-event";
 
 const EventAddScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [location, setLocation] = useState('');
   const [guestList, setGuestList] = useState([]);
+
+  const [event, setEvent] = useState([]);
+
+  useEffect(() => {
+    try {
+      initEventDB();
+    } catch (err) {
+      console.log(err);
+    }
+    setupEventListener((items) => {
+      setEvent(items);
+    });
+  }, []);
 
   const options = [
     { 
@@ -20,6 +39,9 @@ const EventAddScreen = ({ navigation }) => {
   ];
 
   const handleSaveEvent = () => {
+
+    storeEventItem({ title: title, date: date, location: location, guestList: guestList });
+    navigation.navigate('EventList');
   };
 
   return (
