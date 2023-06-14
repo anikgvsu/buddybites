@@ -50,7 +50,7 @@ const EventAddScreen = ({ navigation }) => {
           'Mark',
         ]}
         multiSelect
-        defaultButtonText="Guest List"
+        defaultButtonText="Choose Guest"
         buttonStyle={styles.dropdownButton}
         buttonTextStyle={styles.dropdownButtonText}
         dropdownStyle={styles.dropdownContainer}
@@ -81,21 +81,32 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
   },
+  dropdownButton: {
+    backgroundColor: '#007AFF',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  dropdownButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   dropdownContainer: {
+    backgroundColor: '#FFF',
+    borderColor: '#CCC',
+    borderWidth: 1,
+    borderRadius: 5,
     marginTop: 10,
   },
   dropdownItem: {
     padding: 10,
-    backgroundColor: '#fff',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
+    backgroundColor: '#FFF',
+    borderBottomColor: '#CCC',
+    borderBottomWidth: 1,
   },
   dropdownItemText: {
-    color: '#333',
-  },
-  dropdownItemsContainer: {
-    maxHeight: '50%',
+    fontSize: 16,
   },
   button: {
     backgroundColor: '#007AFF',
