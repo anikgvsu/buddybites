@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 const EventListScreen = ({ navigation }) => {
@@ -31,14 +31,24 @@ const EventListScreen = ({ navigation }) => {
     </View>
   );
 
-  const handleAddEvent = () => {
-  };
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("EventAdd")
+          }
+        >
+          <View style={styles.addButton}>
+            <Text style={styles.addButtonText}>Add Event</Text>
+          </View>
+        </TouchableOpacity>
+      ),
+    });
+  });
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.addButton} onPress={handleAddEvent}>
-        <Text style={styles.addButtonText}>Add Event</Text>
-      </TouchableOpacity>
       <FlatList
         data={events}
         renderItem={renderEventItem}
@@ -56,14 +66,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   addButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: '#007AFF',
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    elevation: 2,
+    // position: 'absolute',
+    // top: 10,
+    // right: 10,
+    // backgroundColor: '#007AFF',
+    // borderRadius: 10,
+    // paddingVertical: 8,
+    // paddingHorizontal: 16,
+    // elevation: 2,
   },
   addButtonText: {
     color: 'white',

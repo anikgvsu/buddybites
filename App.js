@@ -9,6 +9,7 @@ import LandingScreen from "./screens/LandingScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import LoginScreen from "./screens/LoginScreen";
 import EventListScreen from "./screens/EventListScreen";
+import EventAddScreen from "./screens/EventAddScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -23,6 +24,7 @@ export default function App() {
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="EventList" component={EventListScreen} />
+        <Stack.Screen name="EventAdd" component={EventAddScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
