@@ -9,10 +9,15 @@ import {
 } from "../helpers/fb-event";
 
 const EventAddScreen = ({ navigation }) => {
+
   const [title, setTitle] = useState('');
+  const [titleError, setTitleError] = useState('');
   const [date, setDate] = useState('');
+  const [dateError, setDateError] = useState('');
   const [location, setLocation] = useState('');
+  const [locationError, setLocationError] = useState('');
   const [guestList, setGuestList] = useState([]);
+
 
   const [event, setEvent] = useState([]);
 
@@ -40,9 +45,45 @@ const EventAddScreen = ({ navigation }) => {
 
   const handleSaveEvent = () => {
 
-    storeEventItem({ title: title, date: date, location: location, guestList: guestList });
-    navigation.navigate('EventList');
+    setTitleError('');
+    setDateError('');
+    setLocationError('');
+
+    const titleError = title.trim() === '';
+    const dateError = date.trim() === '';
+    const locationError = location.trim() === '';
+  
+    if (titleError) {
+      setTitleError('Title is required');
+    }
+  
+    if (date.trim() === '') {
+      setDateError('Date is required');
+    }
+  
+    if (location.trim() === '') {
+      setLocationError('Location is required');
+    }
+
+    if (
+      !titleError &&
+      !dateError &&
+      !locationError
+    ) {
+
+      storeEventItem({ 
+        title: title, 
+        date: date, 
+        location: location, 
+        guestList: guestList 
+      });
+
+      navigation.navigate('EventList');
+    }
+  
+    
   };
+  
 
   return (
     <View style={styles.container}>
@@ -52,35 +93,41 @@ const EventAddScreen = ({ navigation }) => {
         value={title}
         onChangeText={setTitle}
       />
+      {titleError ? <Text style={styles.error}>{titleError}</Text> : null}
+
       <TextInput
         style={styles.input}
         placeholder="Date"
         value={date}
         onChangeText={setDate}
       />
+      {dateError ? <Text style={styles.error}>{dateError}</Text> : null}
+
       <TextInput
         style={styles.input}
         placeholder="Location"
         value={location}
         onChangeText={setLocation}
       />
+      {locationError ? <Text style={styles.error}>{locationError}</Text> : null}
+
       <View>
-      <SelectDropdown
-        data={[
-          'John',
-          'Jane',
-          'Mark',
-        ]}
-        multiSelect
-        defaultButtonText="Choose Guest"
-        buttonStyle={styles.dropdownButton}
-        buttonTextStyle={styles.dropdownButtonText}
-        dropdownStyle={styles.dropdownContainer}
-        rowStyle={styles.dropdownItem}
-        rowTextStyle={styles.dropdownItemText}
-        dropdownIconPosition="right"
-        onSelect={(selectedItems) => setGuestList(selectedItems)}
-      />
+        <SelectDropdown
+          data={[
+            'John',
+            'Jane',
+            'Mark',
+          ]}
+          multiSelect
+          defaultButtonText="Choose Guest"
+          buttonStyle={styles.dropdownButton}
+          buttonTextStyle={styles.dropdownButtonText}
+          dropdownStyle={styles.dropdownContainer}
+          rowStyle={styles.dropdownItem}
+          rowTextStyle={styles.dropdownItemText}
+          dropdownIconPosition="right"
+          onSelect={(selectedItems) => setGuestList(selectedItems)}
+        />
       </View>
       
       <TouchableOpacity style={styles.button} onPress={handleSaveEvent}>
@@ -141,6 +188,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+
+  error: {
+    color: 'red',
+    fontSize: 16,
+    marginBottom: 10,
   },
 });
 
