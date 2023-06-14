@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 const LoginScreen = ({ navigation }) => {
-  const [phone, setPhone] = useState('');
-  const [phoneError, setPhoneError] = useState('');
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
 
   const handleLogin = () => {
-    setPhoneError('');
+    setEmailError('');
     setPasswordError('');
 
-    const phoneError = phone.trim() === '';
+    const emailError = email.trim() === '';
     const passwordError = password.trim() === '';
   
-    if (phoneError) {
-      setPhoneError('Phone is required');
+    if (emailError) {
+      setEmailError('Email is required');
     }
   
     if (passwordError) {
@@ -24,7 +24,7 @@ const LoginScreen = ({ navigation }) => {
     }
   
     if (
-      !phoneError &&
+      !emailError &&
       !passwordError 
     ) {
 
@@ -37,11 +37,11 @@ const LoginScreen = ({ navigation }) => {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Phone"
-        value={phone}
-        onChangeText={setPhone}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
       />
-      {phoneError ? <Text style={styles.error}>{phoneError}</Text> : null}
+      {emailError ? <Text style={styles.error}>{emailError}</Text> : null}
 
       <TextInput
         style={styles.input}
