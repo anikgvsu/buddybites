@@ -11,7 +11,7 @@ const SignUpScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [allergy, setAllergy] = useState('');
   const [favoriteFoods, setFavoriteFoods] = useState('');
   const [dietHabit, setDietHabit] = useState('');
@@ -33,7 +33,7 @@ const SignUpScreen = ({ navigation }) => {
     name: '',
     username: '',
     password: '',
-    phone: '',
+    email: '',
     allergy: '',
     favoriteFoods: '',
     dietHabit: '',
@@ -51,8 +51,8 @@ const SignUpScreen = ({ navigation }) => {
     return value ? '' : 'Password is required';
   };
   
-  const validatePhone = (value) => {
-    return value ? '' : 'Phone is required';
+  const validateEmail = (value) => {
+    return value ? '' : 'Email is required';
   };
   
   const validateAllergy = (value) => {
@@ -72,7 +72,7 @@ const SignUpScreen = ({ navigation }) => {
     const nameError = validateName(name);
     const usernameError = validateUsername(username);
     const passwordError = validatePassword(password);
-    const phoneError = validatePhone(phone);
+    const emailError = validateEmail(email);
     const allergyError = validateAllergy(allergy);
     const favoriteFoodsError = validateFavoriteFoods(favoriteFoods);
     const dietHabitError = validateDietHabit(dietHabit);
@@ -81,7 +81,7 @@ const SignUpScreen = ({ navigation }) => {
       name: nameError,
       username: usernameError,
       password: passwordError,
-      phone: phoneError,
+      email: emailError,
       allergy: allergyError,
       favoriteFoods: favoriteFoodsError,
       dietHabit: dietHabitError,
@@ -91,7 +91,7 @@ const SignUpScreen = ({ navigation }) => {
       !nameError &&
       !usernameError &&
       !passwordError &&
-      !phoneError &&
+      !emailError &&
       !allergyError &&
       !favoriteFoodsError &&
       !dietHabitError
@@ -100,7 +100,7 @@ const SignUpScreen = ({ navigation }) => {
         name: name,
         username: username,
         password: password,
-        phone: phone,
+        email: email,
         allergy: allergy,
         favoriteFoods: favoriteFoods,
         dietHabit: dietHabit,
@@ -139,11 +139,11 @@ const SignUpScreen = ({ navigation }) => {
 
       <TextInput
         style={styles.input}
-        placeholder="Phone"
-        value={phone}
-        onChangeText={setPhone}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
       />
-      {error.phone ? <Text style={styles.error}>{error.phone}</Text> : null}
+      {error.email ? <Text style={styles.error}>{error.email}</Text> : null}
 
       <TextInput
         style={styles.input}
