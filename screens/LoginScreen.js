@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -28,7 +30,35 @@ const LoginScreen = ({ navigation }) => {
       !passwordError 
     ) {
 
-      navigation.navigate('EventList');
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+
+          console.log('user signed in');
+          console.log(user);
+
+          navigation.navigate('EventList');
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(error.code);
+
+          if( error.code === 'auth/user-not-found') {
+
+            setEmailError('User Email not found');
+          }
+
+          if( error.code === 'auth/wrong-password') {
+
+            setPasswordError('Wrong Password');
+          }
+        });
+
+      
     }
   };
   
