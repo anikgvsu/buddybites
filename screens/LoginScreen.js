@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -8,6 +8,25 @@ const LoginScreen = ({ navigation }) => {
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+
+  useEffect(() => {
+    
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() => {
+
+            navigation.navigate('Home');
+          }}
+        >
+          <View>
+            <Text style={styles.homeButtonText}>Home</Text>
+          </View>
+        </TouchableOpacity>
+      ),
+    });
+
+  }, []);
 
 
   const handleLogin = () => {
@@ -110,6 +129,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  homeButtonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
