@@ -10,6 +10,7 @@ import SignUpScreen from "./screens/SignUpScreen";
 import LoginScreen from "./screens/LoginScreen";
 import EventListScreen from "./screens/EventListScreen";
 import EventAddScreen from "./screens/EventAddScreen";
+import RecepieScreen from "./screens/RecepieScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -25,6 +26,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="EventList" component={EventListScreen} />
         <Stack.Screen name="EventAdd" component={EventAddScreen} />
+        <Stack.Screen name="Recepie" component={RecepieScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -38,6 +40,7 @@ const navStyling = {
   headerTitleStyle: {
     fontWeight: "bold",
   },
+  headerTitleAlign: 'center'
 };
 
 const styles = StyleSheet.create({
@@ -45,5 +48,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     margin: 20,
     flex: 1,
+    textAlign: 'center',
   },
 });

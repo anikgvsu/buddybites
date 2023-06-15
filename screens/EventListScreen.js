@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, FlatList, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
+
+import {getFoodFacts} from '../api/FoodAPI.js';
 
 const EventListScreen = ({ navigation }) => {
   const [events, setEvents] = useState([
@@ -47,6 +49,9 @@ const EventListScreen = ({ navigation }) => {
     });
   });
 
+  const goToRecepie = () => {
+    navigation.navigate("Recepie")
+  }
   return (
     <View style={styles.container}>
       <FlatList
@@ -55,6 +60,7 @@ const EventListScreen = ({ navigation }) => {
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.eventList}
       />
+      <Button title="Surprize Recepie" onPress={goToRecepie} />
     </View>
   );
 };
@@ -79,6 +85,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+    margin:20,
   },
   eventList: {
     flexGrow: 1,
