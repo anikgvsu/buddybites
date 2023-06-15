@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 const EventListScreen = ({ navigation }) => {
   const [events, setEvents] = useState([
@@ -53,7 +53,25 @@ const EventListScreen = ({ navigation }) => {
       }
     });
 
+    const userSignOut = () => {
+      signOut(auth)
+        .then(() => {
+          console.log("sign out successful");
+          navigation.navigate('Login');
+        })
+        .catch((error) => console.log(error));
+    };
+
     navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={userSignOut}
+        >
+          <View style={styles.addButton}>
+            <Text style={styles.addButtonText}>Logout</Text>
+          </View>
+        </TouchableOpacity>
+      ),
       headerRight: () => (
         <TouchableOpacity
           onPress={() =>
