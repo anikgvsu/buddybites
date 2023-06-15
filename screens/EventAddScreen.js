@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 import {
   initEventDB,
@@ -33,6 +33,27 @@ const EventAddScreen = ({ navigation }) => {
           const uid = user.uid;
           console.log('user is signed in event add screen');
           console.log(user.uid);
+
+          const userSignOut = () => {
+            signOut(auth)
+              .then(() => {
+                console.log("sign out successful");
+                navigation.navigate('Login');
+              })
+              .catch((error) => console.log(error));
+          };
+      
+          navigation.setOptions({
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={userSignOut}
+              >
+                <View>
+                  <Text style={styles.signOutButtonText}>Logout</Text>
+                </View>
+              </TouchableOpacity>
+            ),
+          });
           // ...
         } else {
 
@@ -51,6 +72,7 @@ const EventAddScreen = ({ navigation }) => {
     setupEventListener((items) => {
       setEvent(items);
     });
+
   }, []);
 
   const options = [
@@ -215,6 +237,12 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 16,
     marginBottom: 10,
+  },
+
+  signOutButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

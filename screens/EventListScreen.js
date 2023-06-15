@@ -67,8 +67,8 @@ const EventListScreen = ({ navigation }) => {
         <TouchableOpacity
           onPress={userSignOut}
         >
-          <View style={styles.addButton}>
-            <Text style={styles.addButtonText}>Logout</Text>
+          <View>
+            <Text style={styles.signOutButtonText}>Logout</Text>
           </View>
         </TouchableOpacity>
       ),
@@ -119,6 +119,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+
+  signOutButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
   eventList: {
     flexGrow: 1,
     marginTop: 40,
