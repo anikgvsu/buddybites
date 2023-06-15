@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 const EventListScreen = ({ navigation }) => {
   const [events, setEvents] = useState([
     {
@@ -32,6 +34,25 @@ const EventListScreen = ({ navigation }) => {
   );
 
   useEffect(() => {
+
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        const uid = user.uid;
+        console.log('user is signed in event list screen');
+        console.log(user.uid);
+        // ...
+      } else {
+
+        console.log('user is signed out');
+        navigation.navigate('Login');
+        // User is signed out
+        // ...
+        
+      }
+    });
+
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity

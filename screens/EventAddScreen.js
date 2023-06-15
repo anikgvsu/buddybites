@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import SelectDropdown from 'react-native-select-dropdown'
+import SelectDropdown from 'react-native-select-dropdown';
+
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import {
   initEventDB,
@@ -23,6 +25,25 @@ const EventAddScreen = ({ navigation }) => {
 
   useEffect(() => {
     try {
+
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in
+          const uid = user.uid;
+          console.log('user is signed in event add screen');
+          console.log(user.uid);
+          // ...
+        } else {
+
+          console.log('user is signed out');
+          navigation.navigate('Login');
+          // User is signed out
+          // ...
+          
+        }
+      });
+
       initEventDB();
     } catch (err) {
       console.log(err);
