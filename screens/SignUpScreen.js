@@ -148,7 +148,7 @@ const SignUpScreen = ({ navigation }) => {
           console.log(error);
           // ..
         });
-      navigation.navigate('EventList');
+      navigation.navigate('Login');
     }
   };
   
