@@ -1,12 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import SelectDropdown from 'react-native-select-dropdown'
+import SelectDropdown from 'react-native-select-dropdown';
+
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
+import {
+  initEventDB,
+  setupEventListener,
+  storeEventItem,
+} from "../helpers/fb-event";
 
 const EventAddScreen = ({ navigation }) => {
+
   const [title, setTitle] = useState('');
+  const [titleError, setTitleError] = useState('');
   const [date, setDate] = useState('');
+  const [dateError, setDateError] = useState('');
   const [location, setLocation] = useState('');
+  const [locationError, setLocationError] = useState('');
   const [guestList, setGuestList] = useState([]);
+
+
+  const [event, setEvent] = useState([]);
+
+  useEffect(() => {
+    try {
+
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in
+          const uid = user.uid;
+          console.log('user is signed in event add screen');
+          console.log(user.uid);
+
+          const userSignOut = () => {
+            signOut(auth)
+              .then(() => {
+                console.log("sign out successful");
+                navigation.navigate('Login');
+              })
+              .catch((error) => console.log(error));
+          };
+      
+          navigation.setOptions({
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={userSignOut}
+              >
+                <View>
+                  <Text style={styles.signOutButtonText}>Logout</Text>
+                </View>
+              </TouchableOpacity>
+            ),
+          });
+          // ...
+        } else {
+
+          console.log('user is signed out');
+          navigation.navigate('Login');
+          // User is signed out
+          // ...
+          
+        }
+      });
+
+      initEventDB();
+    } catch (err) {
+      console.log(err);
+    }
+    setupEventListener((items) => {
+      setEvent(items);
+    });
+
+  }, []);
 
   const options = [
     { 
@@ -20,7 +87,46 @@ const EventAddScreen = ({ navigation }) => {
   ];
 
   const handleSaveEvent = () => {
+
+    setTitleError('');
+    setDateError('');
+    setLocationError('');
+
+    const titleError = title.trim() === '';
+    const dateError = date.trim() === '';
+    const locationError = location.trim() === '';
+  
+    if (titleError) {
+      setTitleError('Title is required');
+    }
+  
+    if (dateError) {
+      setDateError('Date is required');
+    }
+  
+    if (locationError) {
+      setLocationError('Location is required');
+    }
+
+    if (
+      !titleError &&
+      !dateError &&
+      !locationError
+    ) {
+
+      storeEventItem({ 
+        title: title, 
+        date: date, 
+        location: location, 
+        guestList: guestList 
+      });
+
+      navigation.navigate('EventList');
+    }
+  
+    
   };
+  
 
   return (
     <View style={styles.container}>
@@ -30,35 +136,41 @@ const EventAddScreen = ({ navigation }) => {
         value={title}
         onChangeText={setTitle}
       />
+      {titleError ? <Text style={styles.error}>{titleError}</Text> : null}
+
       <TextInput
         style={styles.input}
         placeholder="Date"
         value={date}
         onChangeText={setDate}
       />
+      {dateError ? <Text style={styles.error}>{dateError}</Text> : null}
+
       <TextInput
         style={styles.input}
         placeholder="Location"
         value={location}
         onChangeText={setLocation}
       />
+      {locationError ? <Text style={styles.error}>{locationError}</Text> : null}
+
       <View>
-      <SelectDropdown
-        data={[
-          'John',
-          'Jane',
-          'Mark',
-        ]}
-        multiSelect
-        defaultButtonText="Choose Guest"
-        buttonStyle={styles.dropdownButton}
-        buttonTextStyle={styles.dropdownButtonText}
-        dropdownStyle={styles.dropdownContainer}
-        rowStyle={styles.dropdownItem}
-        rowTextStyle={styles.dropdownItemText}
-        dropdownIconPosition="right"
-        onSelect={(selectedItems) => setGuestList(selectedItems)}
-      />
+        <SelectDropdown
+          data={[
+            'John',
+            'Jane',
+            'Mark',
+          ]}
+          multiSelect
+          defaultButtonText="Choose Guest"
+          buttonStyle={styles.dropdownButton}
+          buttonTextStyle={styles.dropdownButtonText}
+          dropdownStyle={styles.dropdownContainer}
+          rowStyle={styles.dropdownItem}
+          rowTextStyle={styles.dropdownItemText}
+          dropdownIconPosition="right"
+          onSelect={(selectedItems) => setGuestList(selectedItems)}
+        />
       </View>
       
       <TouchableOpacity style={styles.button} onPress={handleSaveEvent}>
@@ -116,6 +228,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
+  error: {
+    color: 'red',
+    fontSize: 16,
+    marginBottom: 10,
+  },
+
+  signOutButtonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',

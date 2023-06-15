@@ -1,23 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
 const LoginScreen = ({ navigation }) => {
-  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  useEffect(() => {
+    
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() => {
+
+            navigation.navigate('Home');
+          }}
+        >
+          <View>
+            <Text style={styles.homeButtonText}>Home</Text>
+          </View>
+        </TouchableOpacity>
+      ),
+    });
+
+  }, []);
+
 
   const handleLogin = () => {
+    setEmailError('');
+    setPasswordError('');
 
-    navigation.navigate('EventList');
+    const emailError = email.trim() === '';
+    const passwordError = password.trim() === '';
+  
+    if (emailError) {
+      setEmailError('Email is required');
+    }
+  
+    if (passwordError) {
+      setPasswordError('Password is required');
+    }
+  
+    if (
+      !emailError &&
+      !passwordError 
+    ) {
+
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+
+          console.log('user signed in');
+          console.log(user);
+
+          navigation.navigate('EventList');
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(error.code);
+
+          if( error.code === 'auth/user-not-found') {
+
+            setEmailError('User Email not found');
+          }
+
+          if( error.code === 'auth/wrong-password') {
+
+            setPasswordError('Wrong Password');
+          }
+        });
+
+      
+    }
   };
+  
 
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Phone"
-        value={phone}
-        onChangeText={setPhone}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
       />
+      {emailError ? <Text style={styles.error}>{emailError}</Text> : null}
+
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -25,6 +99,8 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
+      {passwordError ? <Text style={styles.error}>{passwordError}</Text> : null}
+
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
@@ -56,6 +132,17 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  homeButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
+  error: {
+    color: 'red',
+    fontSize: 16,
+    marginBottom: 10,
   },
 });
 

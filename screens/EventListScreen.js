@@ -3,6 +3,8 @@ import { View, FlatList, StyleSheet, Text, Button, TouchableOpacity } from 'reac
 
 import {getFoodFacts} from '../api/FoodAPI.js';
 
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
 const EventListScreen = ({ navigation }) => {
   const [events, setEvents] = useState([
     {
@@ -34,7 +36,44 @@ const EventListScreen = ({ navigation }) => {
   );
 
   useEffect(() => {
+
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        const uid = user.uid;
+        console.log('user is signed in event list screen');
+        console.log(user.uid);
+        // ...
+      } else {
+
+        console.log('user is signed out');
+        navigation.navigate('Login');
+        // User is signed out
+        // ...
+        
+      }
+    });
+
+    const userSignOut = () => {
+      signOut(auth)
+        .then(() => {
+          console.log("sign out successful");
+          navigation.navigate('Login');
+        })
+        .catch((error) => console.log(error));
+    };
+
     navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={userSignOut}
+        >
+          <View>
+            <Text style={styles.signOutButtonText}>Logout</Text>
+          </View>
+        </TouchableOpacity>
+      ),
       headerRight: () => (
         <TouchableOpacity
           onPress={() =>
@@ -87,6 +126,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     margin:20,
   },
+
+  signOutButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
   eventList: {
     flexGrow: 1,
     marginTop: 40,
