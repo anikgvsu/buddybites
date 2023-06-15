@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
 import {
   initUserDB,
   setupUserListener,
@@ -18,6 +20,8 @@ const SignUpScreen = ({ navigation }) => {
 
   const[user, setUser] = useState([]);
 
+  // console.log(user);
+
   useEffect(() => {
     try {
       initUserDB();
@@ -25,6 +29,7 @@ const SignUpScreen = ({ navigation }) => {
       console.log(err);
     }
     setupUserListener((items) => {
+      // console.log(items);
       setUser(items);
     });
   }, []);
@@ -69,6 +74,25 @@ const SignUpScreen = ({ navigation }) => {
   
 
   const handleSignUp = () => {
+
+    const isDuplicateUsername = user.some((item) => item.username === username);
+    if (isDuplicateUsername) {
+      setError((prevError) => ({
+        ...prevError,
+        username: 'Username is already taken',
+      }));
+      return;
+    }
+
+    const isDuplicateEmail = user.some((item) => item.email === email);
+    if (isDuplicateEmail) {
+      setError((prevError) => ({
+        ...prevError,
+        email: 'Email is already registered',
+      }));
+      return;
+    }
+
     const nameError = validateName(name);
     const usernameError = validateUsername(username);
     const passwordError = validatePassword(password);
@@ -96,15 +120,34 @@ const SignUpScreen = ({ navigation }) => {
       !favoriteFoodsError &&
       !dietHabitError
     ) {
-      storeUserItem({
-        name: name,
-        username: username,
-        password: password,
-        email: email,
-        allergy: allergy,
-        favoriteFoods: favoriteFoods,
-        dietHabit: dietHabit,
-      });
+      
+
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          console.log('user signed in');
+          console.log(user);
+
+          storeUserItem({
+            name: name,
+            username: username,
+            password: password,
+            email: email,
+            allergy: allergy,
+            favoriteFoods: favoriteFoods,
+            dietHabit: dietHabit,
+            uid: user.uid
+          });
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(error);
+          // ..
+        });
       navigation.navigate('EventList');
     }
   };

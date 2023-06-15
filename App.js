@@ -3,6 +3,7 @@ import {
   SafeAreaView,
   StyleSheet,
   TouchableWithoutFeedback,
+  LogBox
 } from "react-native";
 
 import LandingScreen from "./screens/LandingScreen";
@@ -15,6 +16,8 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
+
+LogBox.ignoreAllLogs();
 
 export default function App() {
   return (
