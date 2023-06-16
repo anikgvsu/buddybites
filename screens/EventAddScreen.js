@@ -5,8 +5,6 @@ import MultiSelect from 'react-native-multiple-select';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 import {
-  initEventDB,
-  setupEventListener,
   storeEventItem,
 } from "../helpers/fb-event";
 
@@ -31,8 +29,6 @@ const EventAddScreen = ({ navigation }) => {
   const [guestList, setGuestList] = useState([]);
   const [selectedGuestList, setSelectedGuestList] = useState([]);
 
-
-  const [event, setEvent] = useState([]);
 
   useEffect(() => {
 
@@ -81,7 +77,6 @@ const EventAddScreen = ({ navigation }) => {
       });
 
       initUserDB();
-      initEventDB();
       
     } catch (err) {
       console.log(err);
@@ -95,13 +90,6 @@ const EventAddScreen = ({ navigation }) => {
           .filter((item) => item.uid !== currentUserUid)
           .map((item) => ({ id: item.uid, name: item.name }));
         setGuestList(filteredItems);
-      }
-    });
-    
-
-    setupEventListener((items) => {
-      if (isMounted) {
-        setEvent(items);
       }
     });
 

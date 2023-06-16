@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
 
-import {getFoodFacts} from '../api/FoodAPI.js';
 
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
-import {
-  setupEventListener,
-} from "../helpers/fb-event";
+const EventListScreen = ({ navigation, route }) => {
 
-const EventListScreen = ({ navigation }) => {
-
-  const [events, setEvents] = useState([]);
+  const { events } = route.params;
 
   const renderEventItem = ({ item }) => {
     const goToEventDetails = () => {
@@ -35,17 +30,12 @@ const EventListScreen = ({ navigation }) => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in
-        const uid = user.uid;
         console.log('user is signed in event list screen');
-        console.log(user.uid);
         // ...
       } else {
-
         console.log('user is signed out');
         navigation.navigate('Login');
         // User is signed out
-        // ...
-        
       }
     });
 
@@ -80,11 +70,7 @@ const EventListScreen = ({ navigation }) => {
         </TouchableOpacity>
       ),
     });
-
-    setupEventListener((items) => {
-
-      setEvents(items);
-    });
+    
   }, []);
 
   const goToRecepie = () => {

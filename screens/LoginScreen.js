@@ -3,6 +3,10 @@ import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-nativ
 
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
+import {
+  getEventsByHostId,
+} from "../helpers/fb-event";
+
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -53,12 +57,17 @@ const LoginScreen = ({ navigation }) => {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed in 
-          const user = userCredential.user;
+          const userUid = userCredential.user.uid;
 
-          console.log('user signed in');
-          console.log(user);
+          getEventsByHostId(userUid, (eventData) => {
+            if (eventData) {
+              navigation.navigate("EventList", { events: eventData });
+            } else {
+              setEvent(null);
+          }
+          });
 
-          navigation.navigate('EventList');
+          
           // ...
         })
         .catch((error) => {

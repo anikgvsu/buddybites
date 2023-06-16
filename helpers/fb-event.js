@@ -23,22 +23,47 @@ export function storeEventItem(item) {
   push(reference, item);
 }
 
-export function setupEventListener(updateFunc) {
-    const db = getDatabase();
-    const reference = ref(db,"eventData/" )
-    onValue(reference, (snapshot) => {
-        if (snapshot?.val()) {
-          const fbObject = snapshot.val();
-          const newArr = [];
-          Object.keys(fbObject).map((key, index) => {
-            newArr.push({ ...fbObject[key], id: key });
-          });
-          updateFunc(newArr);
-        } else {
-          updateFunc([]);
+// export function setupEventListenerByHostUid(hostUid, updateFunc) {
+//   const db = getDatabase();
+//   const reference = ref(db, "eventData/");
+//   onValue(reference, (snapshot) => {
+//     if (snapshot?.val()) {
+//       const fbObject = snapshot.val();
+//       const newArr = [];
+//       Object.keys(fbObject).forEach((key) => {
+//         const event = { ...fbObject[key], id: key };
+//         if (event.hostUid === hostUid) {
+//           newArr.push(event);
+//         }
+//       });
+//       updateFunc(newArr);
+//     } else {
+//       updateFunc([]);
+//     }
+//   });
+// }
+
+export function getEventsByHostId(hostId, callback) {
+  const db = getDatabase();
+  const reference = ref(db, "eventData/");
+  onValue(reference, (snapshot) => {
+    if (snapshot?.val()) {
+      const fbObject = snapshot.val();
+      const newArr = Object.keys(fbObject).reduce((result, key) => {
+        const event = { ...fbObject[key], id: key };
+        if (event.hostUid === hostId) {
+          result.push(event);
         }
-      });
+        return result;
+      }, []);
+      callback(newArr);
+    } else {
+      callback([]);
+    }
+  });
 }
+
+
 
 export function getEventById(eventId, callback) {
   const db = getDatabase();
