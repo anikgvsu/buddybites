@@ -18,7 +18,9 @@ const RecepieScreen = ({ navigation }) => {
 
   const getRecipe = () => {
     getFoodFacts(ingredients, (data) => {
-      console.log("food data here",data, data.recipes[0].image, data.recipes[0].instructions, data.recipes[0].summary);
+      console.log(data.recipes[0].image);
+
+      // console.log("food data here",data, data.recipes[0].image, data.recipes[0].instructions, data.recipes[0].summary);
       setRecipe({image: data.recipes[0].image, instruction: data.recipes[0].instructions, 
         summary: data.recipes[0].summary, title: data.recipes[0].title})
     });
@@ -31,7 +33,9 @@ const RecepieScreen = ({ navigation }) => {
           <View style={styles.weatherView}>
             <Image
               style={styles.recipeImage}
-              source={recipe.image}
+              source={{
+                uri: recipe.image,
+              }}
             />
             <View>
               <Text style={styles.recipeTitle}>
