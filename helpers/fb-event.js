@@ -39,3 +39,16 @@ export function setupEventListener(updateFunc) {
         }
       });
 }
+
+export function getEventById(eventId, callback) {
+  const db = getDatabase();
+  const reference = ref(db, `eventData/${eventId}`);
+  onValue(reference, (snapshot) => {
+    if (snapshot?.val()) {
+      const eventData = snapshot.val();
+      callback(eventData);
+    } else {
+      callback(null);
+    }
+  });
+}

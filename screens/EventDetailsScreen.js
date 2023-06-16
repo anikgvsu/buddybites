@@ -1,19 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import {
+    getEventById,
+  } from "../helpers/fb-event";
 
 const EventDetailsScreen = ({ route }) => {
   const { eventId } = route.params;
+  const [event, setEvent] = useState(null);
 
-  console.log('event id');
-  console.log(eventId);
+  useEffect(() => {
+    getEventById(eventId, (eventData) => {
+      if (eventData) {
+        setEvent(eventData);
+      } else {
+        setEvent(null);
+    }
+    });
+  }, [eventId]);
 
-  const event = {
-    id: 1,
-    title: 'Birthday Party',
-    date: '2023-06-15',
-    location: 'Apple Ridge',
-    description: 'Join us for a fun-filled birthday party!',
-  };
+  if (!event) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading event details...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
