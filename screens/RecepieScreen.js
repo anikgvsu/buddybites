@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Image, TextInput, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
+import { View,ScrollView, FlatList, Image, TextInput, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 
 import {getFoodFacts} from '../api/FoodAPI.js';
-import {StringToJSX} from "../helpers/String2JSX.js";
 
 const RecepieScreen = ({ navigation }) => {
   const { width } = useWindowDimensions();
@@ -30,7 +29,7 @@ const RecepieScreen = ({ navigation }) => {
         return <View></View>;
       } else {
         return (
-          <View style={styles.weatherView}>
+          <ScrollView contentContainerStyle={styles.weatherView}>
             <Image
               style={styles.recipeImage}
               source={{
@@ -41,11 +40,12 @@ const RecepieScreen = ({ navigation }) => {
               <Text style={styles.recipeTitle}>
                 {recipe.title}
               </Text>
+              <Text style={styles.description}>
               <RenderHtml contentWidth={width} source={{html:recipe.instruction}}/>
               <RenderHtml contentWidth={width} source={{html:recipe.summary}}/>
-
+              </Text>
             </View>
-          </View>
+            </ScrollView>
         );
       }
     };
@@ -105,6 +105,8 @@ const RecepieScreen = ({ navigation }) => {
     },
     description: {
       fontSize: 18,
+      marginRight: 20,
+      marginLeft: 20,
     },
     container: {
       padding: 10,
