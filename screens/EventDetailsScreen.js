@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {
     getEventById,
-  } from "../helpers/fb-event";
+  } from "../helpers/fb-db";
 
 const EventDetailsScreen = ({ route }) => {
   const { eventId } = route.params;

@@ -6,17 +6,12 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 import {
   storeEventItem,
-} from "../helpers/fb-event";
+} from "../helpers/fb-db";
 
-import {
-  initUserDB,
-  setupUserListener,
-  storeUserItem,
-} from "../helpers/fb-user";
+const EventAddScreen = ({ navigation, route }) => {
 
-const EventAddScreen = ({ navigation }) => {
-
-  const [hostUid, setHostUid] = useState('');
+  const { hostUid } = route.params ?? { hostUid: null };
+  const { guestList } = route.params ?? { guestList: [] };
 
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState('');
@@ -26,8 +21,7 @@ const EventAddScreen = ({ navigation }) => {
   const [dateError, setDateError] = useState('');
   const [location, setLocation] = useState('');
   const [locationError, setLocationError] = useState('');
-  const [guestList, setGuestList] = useState([]);
-  const [selectedGuestList, setSelectedGuestList] = useState([]);
+  const [selectedGuestList, setSelectedGuestList] = useState();
 
 
   useEffect(() => {
@@ -40,10 +34,6 @@ const EventAddScreen = ({ navigation }) => {
       onAuthStateChanged(auth, (user) => {
         if (user) {
           // User is signed in
-          const uid = user.uid;
-          // console.log('user is signed in event add screen');
-          // console.log(user.uid);
-          setHostUid(uid);
 
           const userSignOut = () => {
             signOut(auth)
@@ -75,27 +65,10 @@ const EventAddScreen = ({ navigation }) => {
           
         }
       });
-
-      initUserDB();
       
     } catch (err) {
       console.log(err);
     }
-
-    setupUserListener((items) => {
-      if (isMounted) {
-        const auth = getAuth();
-        const currentUserUid = auth.currentUser.uid;
-        const filteredItems = items
-          .filter((item) => item.uid !== currentUserUid)
-          .map((item) => ({ id: item.uid, name: item.name }));
-        setGuestList(filteredItems);
-      }
-    });
-
-    return () => {
-      isMounted = false;
-    };
 
   }, []);
 

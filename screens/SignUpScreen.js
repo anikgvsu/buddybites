@@ -4,10 +4,10 @@ import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-nativ
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 import {
-  initUserDB,
-  setupUserListener,
+  getAllUsers,
+  initFirebase,
   storeUserItem,
-} from "../helpers/fb-user";
+} from "../helpers/fb-db";
 
 const SignUpScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -24,11 +24,11 @@ const SignUpScreen = ({ navigation }) => {
 
   useEffect(() => {
     try {
-      initUserDB();
+      initFirebase();
     } catch (err) {
       console.log(err);
     }
-    setupUserListener((items) => {
+    getAllUsers((items) => {
       // console.log(items);
       setUser(items);
     });

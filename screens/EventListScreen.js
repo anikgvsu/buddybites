@@ -6,7 +6,9 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 const EventListScreen = ({ navigation, route }) => {
 
-  const { events } = route.params;
+  const { events } = route.params ?? { events: [] };
+  const { guestList } = route.params ?? { guestList: [] };
+
 
   const renderEventItem = ({ item }) => {
     const goToEventDetails = () => {
