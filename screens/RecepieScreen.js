@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Image, TextInput, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
+import { useWindowDimensions } from 'react-native';
+import RenderHtml from 'react-native-render-html';
 
 import {getFoodFacts} from '../api/FoodAPI.js';
 import {StringToJSX} from "../helpers/String2JSX.js";
 
 const RecepieScreen = ({ navigation }) => {
+  const { width } = useWindowDimensions();
   const [ingredients, setIngredients] = useState("");
   const [recipe, setRecipe] = useState({
     image: '',
@@ -34,8 +37,9 @@ const RecepieScreen = ({ navigation }) => {
               <Text style={styles.recipeTitle}>
                 {recipe.title}
               </Text>
-              <Text> <StringToJSX domString={recipe.instruction}/> </Text>
-              <Text> <StringToJSX domString={recipe.summary}/> </Text>
+              <RenderHtml contentWidth={width} source={{html:recipe.instruction}}/>
+              <RenderHtml contentWidth={width} source={{html:recipe.summary}}/>
+
             </View>
           </View>
         );

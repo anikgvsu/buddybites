@@ -187,7 +187,7 @@ const EventAddScreen = ({ navigation }) => {
         itemTextColor="#000"
         displayKey="name"
         searchInputStyle={{ color: '#CCC' }}
-        submitButtonColor="#CCC"
+        submitButtonColor="#33E6FF"
         submitButtonText="Confirm"
       />
     </View>
