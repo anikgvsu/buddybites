@@ -18,8 +18,12 @@ import {
 
 const EventAddScreen = ({ navigation }) => {
 
+  const [hostUid, setHostUid] = useState('');
+
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState('');
+  const [description, setDescription] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
   const [date, setDate] = useState('');
   const [dateError, setDateError] = useState('');
   const [location, setLocation] = useState('');
@@ -43,6 +47,7 @@ const EventAddScreen = ({ navigation }) => {
           const uid = user.uid;
           // console.log('user is signed in event add screen');
           // console.log(user.uid);
+          setHostUid(uid);
 
           const userSignOut = () => {
             signOut(auth)
@@ -111,13 +116,19 @@ const EventAddScreen = ({ navigation }) => {
     setTitleError('');
     setDateError('');
     setLocationError('');
+    setDescriptionError('');
 
     const titleError = title.trim() === '';
     const dateError = date.trim() === '';
     const locationError = location.trim() === '';
+    const descriptionError = description.trim() === '';
   
     if (titleError) {
       setTitleError('Title is required');
+    }
+
+    if (descriptionError) {
+      setDescriptionError('Description is required');
     }
   
     if (dateError) {
@@ -131,14 +142,16 @@ const EventAddScreen = ({ navigation }) => {
     if (
       !titleError &&
       !dateError &&
-      !locationError
+      !locationError &&
+      !descriptionError
     ) {
-
       storeEventItem({ 
         title: title, 
+        description: description,
         date: date, 
         location: location, 
-        guestList: selectedGuestList 
+        guestList: selectedGuestList,
+        hostUid: hostUid
       });
 
       navigation.navigate('EventList');
@@ -157,6 +170,15 @@ const EventAddScreen = ({ navigation }) => {
         onChangeText={setTitle}
       />
       {titleError ? <Text style={styles.error}>{titleError}</Text> : null}
+
+      <TextInput
+        style={styles.input}
+        placeholder="Description"
+        value={description}
+        onChangeText={setDescription}
+      />
+      {descriptionError ? <Text style={styles.error}>{descriptionError}</Text> : null}
+
 
       <TextInput
         style={styles.input}
