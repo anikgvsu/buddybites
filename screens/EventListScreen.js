@@ -5,27 +5,13 @@ import {getFoodFacts} from '../api/FoodAPI.js';
 
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
+import {
+  setupEventListener,
+} from "../helpers/fb-event";
+
 const EventListScreen = ({ navigation }) => {
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      title: 'Birthday Party',
-      date: '2023-06-15',
-      location: '123 Main St',
-    },
-    {
-      id: 2,
-      title: 'Wedding Reception',
-      date: '2023-07-10',
-      location: '456 Elm St',
-    },
-    {
-      id: 3,
-      title: 'Family Gathering',
-      date: '2023-08-05',
-      location: '789 Oak St',
-    },
-  ]);
+
+  const [events, setEvents] = useState([]);
 
   const renderEventItem = ({ item }) => (
     <View style={styles.eventItem}>
@@ -86,7 +72,12 @@ const EventListScreen = ({ navigation }) => {
         </TouchableOpacity>
       ),
     });
-  });
+
+    setupEventListener((items) => {
+
+      setEvents(items);
+    });
+  }, []);
 
   const goToRecepie = () => {
     navigation.navigate("Recepie")
