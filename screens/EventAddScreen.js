@@ -41,8 +41,8 @@ const EventAddScreen = ({ navigation }) => {
         if (user) {
           // User is signed in
           const uid = user.uid;
-          console.log('user is signed in event add screen');
-          console.log(user.uid);
+          // console.log('user is signed in event add screen');
+          // console.log(user.uid);
 
           const userSignOut = () => {
             signOut(auth)
@@ -67,7 +67,7 @@ const EventAddScreen = ({ navigation }) => {
           // ...
         } else {
 
-          console.log('user is signed out');
+          // console.log('user is signed out');
           navigation.navigate('Login');
           // User is signed out
           // ...
@@ -107,7 +107,7 @@ const EventAddScreen = ({ navigation }) => {
   }, []);
 
   const handleSaveEvent = () => {
-    console.log(guestList)
+    // console.log(guestList)
     setTitleError('');
     setDateError('');
     setLocationError('');
