@@ -13,13 +13,21 @@ const EventListScreen = ({ navigation }) => {
 
   const [events, setEvents] = useState([]);
 
-  const renderEventItem = ({ item }) => (
-    <View style={styles.eventItem}>
-      <Text style={styles.eventTitle}>{item.title}</Text>
-      <Text style={styles.eventDate}>{item.date}</Text>
-      <Text style={styles.eventLocation}>{item.location}</Text>
-    </View>
-  );
+  const renderEventItem = ({ item }) => {
+    const goToEventDetails = () => {
+      navigation.navigate("EventDetails", { eventId: item.id });
+    };
+
+    return (
+      <TouchableOpacity onPress={goToEventDetails}>
+        <View style={styles.eventItem}>
+          <Text style={styles.eventTitle}>{item.title}</Text>
+          <Text style={styles.eventDate}>{item.date}</Text>
+          <Text style={styles.eventLocation}>{item.location}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   useEffect(() => {
 
@@ -90,7 +98,7 @@ const EventListScreen = ({ navigation }) => {
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.eventList}
       />
-      <Button title="Surprize Recepie" onPress={goToRecepie} />
+      <Button title="Surprise Recipe" onPress={goToRecepie} />
     </View>
   );
 };
