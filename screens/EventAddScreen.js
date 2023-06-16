@@ -10,6 +10,12 @@ import {
   storeEventItem,
 } from "../helpers/fb-event";
 
+import {
+  initUserDB,
+  setupUserListener,
+  storeUserItem,
+} from "../helpers/fb-user";
+
 const EventAddScreen = ({ navigation }) => {
 
   const [title, setTitle] = useState('');
@@ -19,23 +25,8 @@ const EventAddScreen = ({ navigation }) => {
   const [location, setLocation] = useState('');
   const [locationError, setLocationError] = useState('');
   const [guestList, setGuestList] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedGuestList, setSelectedGuestList] = useState([]);
 
-  const items = [{
-    id: '92iijs7yta',
-    name: 'Ondo'
-  }, {
-    id: 'a0s0a8ssbsd',
-    name: 'Ogun'
-  }, {
-    id: '16hbajsabsd',
-    name: 'Calabar'
-  }
-  ]
-
-  const onSelectedItemsChange = (selectedItems) => {
-    setSelectedItems(selectedItems);
-  };
 
   const [event, setEvent] = useState([]);
 
@@ -81,26 +72,29 @@ const EventAddScreen = ({ navigation }) => {
         }
       });
 
+      initUserDB();
       initEventDB();
+      
     } catch (err) {
       console.log(err);
     }
+
+    setupUserListener((items) => {
+      const auth = getAuth();
+      const currentUserUid = auth.currentUser.uid;
+      const filteredItems = items
+        .filter((item) => item.uid !== currentUserUid)
+        .map((item) => ({ id: item.uid, name: item.name }));
+      setGuestList(filteredItems);
+    });
+    
+    
+
     setupEventListener((items) => {
       setEvent(items);
     });
 
   }, []);
-
-  const options = [
-    { 
-      value: 1,
-      label: "Leanne Graham"
-    },
-    {
-      value:  2,
-      label: "Ervin Howell"
-    }
-  ];
 
   const handleSaveEvent = () => {
     console.log(guestList)
@@ -134,7 +128,7 @@ const EventAddScreen = ({ navigation }) => {
         title: title, 
         date: date, 
         location: location, 
-        guestList: guestList 
+        guestList: selectedGuestList 
       });
 
       navigation.navigate('EventList');
@@ -172,10 +166,10 @@ const EventAddScreen = ({ navigation }) => {
 
       <View>
       <MultiSelect
-        items={items}
+        items={guestList}
         uniqueKey="id"
-        onSelectedItemsChange={setGuestList}
-        selectedItems={guestList}
+        onSelectedItemsChange={setSelectedGuestList}
+        selectedItems={selectedGuestList}
         selectText="Select Options"
         searchInputPlaceholderText="Search Options..."
         onChangeInput={(text) => console.log(text)}
