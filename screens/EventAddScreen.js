@@ -31,6 +31,9 @@ const EventAddScreen = ({ navigation }) => {
   const [event, setEvent] = useState([]);
 
   useEffect(() => {
+
+    let isMounted = true;
+
     try {
 
       const auth = getAuth();
@@ -80,19 +83,26 @@ const EventAddScreen = ({ navigation }) => {
     }
 
     setupUserListener((items) => {
-      const auth = getAuth();
-      const currentUserUid = auth.currentUser.uid;
-      const filteredItems = items
-        .filter((item) => item.uid !== currentUserUid)
-        .map((item) => ({ id: item.uid, name: item.name }));
-      setGuestList(filteredItems);
+      if (isMounted) {
+        const auth = getAuth();
+        const currentUserUid = auth.currentUser.uid;
+        const filteredItems = items
+          .filter((item) => item.uid !== currentUserUid)
+          .map((item) => ({ id: item.uid, name: item.name }));
+        setGuestList(filteredItems);
+      }
     });
-    
     
 
     setupEventListener((items) => {
-      setEvent(items);
+      if (isMounted) {
+        setEvent(items);
+      }
     });
+
+    return () => {
+      isMounted = false;
+    };
 
   }, []);
 
