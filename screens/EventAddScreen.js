@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import SelectDropdown from 'react-native-select-dropdown';
+import { View, TextInput, StyleSheet, Button, Text, TouchableOpacity } from 'react-native';
+import MultiSelect from 'react-native-multiple-select';
 
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
@@ -19,7 +19,23 @@ const EventAddScreen = ({ navigation }) => {
   const [location, setLocation] = useState('');
   const [locationError, setLocationError] = useState('');
   const [guestList, setGuestList] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
 
+  const items = [{
+    id: '92iijs7yta',
+    name: 'Ondo'
+  }, {
+    id: 'a0s0a8ssbsd',
+    name: 'Ogun'
+  }, {
+    id: '16hbajsabsd',
+    name: 'Calabar'
+  }
+  ]
+
+  const onSelectedItemsChange = (selectedItems) => {
+    setSelectedItems(selectedItems);
+  };
 
   const [event, setEvent] = useState([]);
 
@@ -87,7 +103,7 @@ const EventAddScreen = ({ navigation }) => {
   ];
 
   const handleSaveEvent = () => {
-
+    console.log(guestList)
     setTitleError('');
     setDateError('');
     setLocationError('');
@@ -155,23 +171,26 @@ const EventAddScreen = ({ navigation }) => {
       {locationError ? <Text style={styles.error}>{locationError}</Text> : null}
 
       <View>
-        <SelectDropdown
-          data={[
-            'John',
-            'Jane',
-            'Mark',
-          ]}
-          multiSelect
-          defaultButtonText="Choose Guest"
-          buttonStyle={styles.dropdownButton}
-          buttonTextStyle={styles.dropdownButtonText}
-          dropdownStyle={styles.dropdownContainer}
-          rowStyle={styles.dropdownItem}
-          rowTextStyle={styles.dropdownItemText}
-          dropdownIconPosition="right"
-          onSelect={(selectedItems) => setGuestList(selectedItems)}
-        />
-      </View>
+      <MultiSelect
+        items={items}
+        uniqueKey="id"
+        onSelectedItemsChange={setGuestList}
+        selectedItems={guestList}
+        selectText="Select Options"
+        searchInputPlaceholderText="Search Options..."
+        onChangeInput={(text) => console.log(text)}
+        tagRemoveIconColor="#CCC"
+        tagBorderColor="#CCC"
+        tagTextColor="#CCC"
+        selectedItemTextColor="#CCC"
+        selectedItemIconColor="#CCC"
+        itemTextColor="#000"
+        displayKey="name"
+        searchInputStyle={{ color: '#CCC' }}
+        submitButtonColor="#CCC"
+        submitButtonText="Confirm"
+      />
+    </View>
       
       <TouchableOpacity style={styles.button} onPress={handleSaveEvent}>
         <Text style={styles.buttonText}>Save Event</Text>
