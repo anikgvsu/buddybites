@@ -53,7 +53,13 @@ const SignUpScreen = ({ navigation }) => {
   };
   
   const validatePassword = (value) => {
-    return value ? '' : 'Password is required';
+    if (!value) {
+      return 'Password is required';
+    }
+    if (value.length < 6) {
+      return 'Password must be at least 6 characters long';
+    }
+    return '';
   };
   
   const validateEmail = (value) => {
