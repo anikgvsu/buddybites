@@ -11,7 +11,9 @@ import { firebaseConfig } from "./fb-credentials";
 import { initializeApp } from "firebase/app";
 
 export function initEventDB() {
-  initializeApp(firebaseConfig);
+  if (!getApps().length) {
+    initializeApp(firebaseConfig);
+  }
 }
 
 export function storeEventItem(item) {
