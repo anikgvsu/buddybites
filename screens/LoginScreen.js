@@ -12,24 +12,16 @@ const LoginScreen = ({ navigation }) => {
   const [passwordError, setPasswordError] = useState('');
 
   useEffect(() => {
-    
     navigation.setOptions({
       headerLeft: () => (
-        <TouchableOpacity
-          onPress={() => {
-
-            navigation.navigate('Home');
-          }}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <View>
             <Text style={styles.homeButtonText}>Home</Text>
           </View>
         </TouchableOpacity>
       ),
     });
-
   }, []);
-
 
   const handleLogin = () => {
     setEmailError('');
@@ -37,20 +29,16 @@ const LoginScreen = ({ navigation }) => {
 
     const emailError = email.trim() === '';
     const passwordError = password.trim() === '';
-  
+
     if (emailError) {
       setEmailError('Email is required');
     }
-  
+
     if (passwordError) {
       setPasswordError('Password is required');
     }
-  
-    if (
-      !emailError &&
-      !passwordError 
-    ) {
 
+    if (!emailError && !passwordError) {
       const auth = getAuth();
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
@@ -59,35 +47,26 @@ const LoginScreen = ({ navigation }) => {
 
           getUsersAndEvents(userUid, (users, eventsAsHost, eventsAsGuest) => {
             if (users || eventsAsHost || eventsAsGuest) {
-
               const guestList = users.map((item) => ({ id: item.uid, name: item.name }));
-              navigation.navigate("EventList", { hostUid: userUid, guestList: guestList, eventsAsHost: eventsAsHost, eventsAsGuest: eventsAsGuest });
+              navigation.navigate("EventList", { hostUid: userUid, guestList, eventsAsHost, eventsAsGuest });
             }
           });
-
-          
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(error.code);
 
-          if( error.code === 'auth/user-not-found') {
-
+          if (error.code === 'auth/user-not-found') {
             setEmailError('User Email not found');
           }
 
-          if( error.code === 'auth/wrong-password') {
-
+          if (error.code === 'auth/wrong-password') {
             setPasswordError('Wrong Password');
           }
         });
-
-      
     }
   };
-  
 
   return (
     <View style={styles.container}>
@@ -120,16 +99,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#fff',
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#ddd',
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+    borderRadius: 5,
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF6F61',
     borderRadius: 10,
     paddingVertical: 12,
     marginTop: 20,
@@ -145,7 +126,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-
   error: {
     color: 'red',
     fontSize: 16,
