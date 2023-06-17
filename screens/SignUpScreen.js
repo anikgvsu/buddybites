@@ -117,7 +117,6 @@ const SignUpScreen = ({ navigation }) => {
       !usernameError &&
       !passwordError &&
       !emailError &&
-      !allergyError &&
       !favoriteFoodsError &&
       !dietHabitError
     ) {
