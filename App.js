@@ -31,7 +31,7 @@ export default function App() {
         <Stack.Screen name="EventList" component={EventListScreen} />
         <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
         <Stack.Screen name="EventAdd" component={EventAddScreen} />
-        <Stack.Screen name="Recepie" component={RecepieScreen} />
+        <Stack.Screen name="Recipe" component={RecepieScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

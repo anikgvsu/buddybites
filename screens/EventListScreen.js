@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
 
-
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 const EventListScreen = ({ navigation, route }) => {
-
   const { hostUid } = route.params ?? { hostUid: null };
   const { eventsAsHost } = route.params ?? { eventsAsHost: [] };
   const { eventsAsGuest } = route.params ?? { eventsAsGuest: [] };
   const { guestList } = route.params ?? { guestList: [] };
 
-
   const renderEventItem = ({ item }) => {
     const goToEventDetails = () => {
-      navigation.navigate("EventDetails", { eventId: item.id });
+      navigation.navigate('EventDetails', { eventId: item.id });
     };
 
     return (
-      <TouchableOpacity onPress={goToEventDetails}>
+      <TouchableOpacity onPress={goToEventDetails} style={styles.eventItemContainer}>
         <View style={styles.eventItem}>
           <Text style={styles.eventTitle}>{item.title}</Text>
           <Text style={styles.eventDate}>{item.date}</Text>
@@ -29,7 +26,6 @@ const EventListScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -46,7 +42,7 @@ const EventListScreen = ({ navigation, route }) => {
     const userSignOut = () => {
       signOut(auth)
         .then(() => {
-          console.log("sign out successful");
+          console.log('sign out successful');
           navigation.navigate('Login');
         })
         .catch((error) => console.log(error));
@@ -54,35 +50,25 @@ const EventListScreen = ({ navigation, route }) => {
 
     navigation.setOptions({
       headerLeft: () => (
-        <TouchableOpacity
-          onPress={userSignOut}
-        >
-          <View>
-            <Text style={styles.signOutButtonText}>Logout</Text>
-          </View>
+        <TouchableOpacity onPress={userSignOut}>
+          <Text style={styles.headerButton}>Logout</Text>
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("EventAdd", { hostUid: hostUid, guestList: guestList });
-          }}
-        >
-          <View>
-            <Text style={styles.addButtonText}>Add Event</Text>
-          </View>
+        <TouchableOpacity onPress={() => navigation.navigate('EventAdd', { hostUid, guestList })}>
+          <Text style={styles.headerButton}>Add Event</Text>
         </TouchableOpacity>
       ),
     });
-    
   }, []);
 
-  const goToRecepie = () => {
-    navigation.navigate("Recepie")
-  }
+  const goToRecipe = () => {
+    navigation.navigate('Recipe');
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Events As Host</Text>
+      <Text style={styles.sectionTitle}>Events As Host</Text>
       <FlatList
         data={eventsAsHost}
         renderItem={renderEventItem}
@@ -90,14 +76,17 @@ const EventListScreen = ({ navigation, route }) => {
         contentContainerStyle={styles.eventList}
       />
 
-      <Text>Events As Guest</Text>
+      <Text style={styles.sectionTitle}>Events As Guest</Text>
       <FlatList
         data={eventsAsGuest}
         renderItem={renderEventItem}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.eventList}
       />
-      <Button style={styles.button} title="Surprise Recipe" onPress={goToRecepie} />
+
+      <TouchableOpacity style={styles.surpriseRecipeButton} onPress={goToRecipe}>
+        <Text style={styles.surpriseRecipeButtonText}>Surprise Recipe</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -108,32 +97,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
-  addButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: '#007AFF',
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    elevation: 2,
-  },
-  addButtonText: {
+  headerButton: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
-    // margin:20,
+    marginHorizontal: 10,
   },
-
-  signOutButtonText: {
-    color: 'white',
-    fontSize: 16,
+  sectionTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 10,
   },
-
   eventList: {
     flexGrow: 1,
-    marginTop: 40,
+  },
+  eventItemContainer: {
+    marginBottom: 10,
   },
   eventItem: {
     paddingVertical: 10,
@@ -151,6 +131,19 @@ const styles = StyleSheet.create({
   eventLocation: {
     fontSize: 14,
     color: '#666',
+  },
+  surpriseRecipeButton: {
+    marginTop: 20,
+    backgroundColor: '#007AFF',
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+  },
+  surpriseRecipeButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
