@@ -18,9 +18,7 @@ const SignUpScreen = ({ navigation }) => {
   const [favoriteFoods, setFavoriteFoods] = useState('');
   const [dietHabit, setDietHabit] = useState('');
 
-  const[user, setUser] = useState([]);
-
-  // console.log(user);
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
     try {
@@ -29,7 +27,6 @@ const SignUpScreen = ({ navigation }) => {
       console.log(err);
     }
     getAllUsers((items) => {
-      // console.log(items);
       setUser(items);
     });
   }, []);
@@ -47,34 +44,32 @@ const SignUpScreen = ({ navigation }) => {
   const validateName = (value) => {
     return value ? '' : 'Name is required';
   };
-  
+
   const validateUsername = (value) => {
     return value ? '' : 'Username is required';
   };
-  
+
   const validatePassword = (value) => {
     return value ? '' : 'Password is required';
   };
-  
+
   const validateEmail = (value) => {
     return value ? '' : 'Email is required';
   };
-  
+
   const validateAllergy = (value) => {
     return value ? '' : 'Allergy is required';
   };
-  
+
   const validateFavoriteFoods = (value) => {
     return value ? '' : 'Favorite Foods is required';
   };
-  
+
   const validateDietHabit = (value) => {
     return value ? '' : 'Diet Habit is required';
   };
-  
 
   const handleSignUp = () => {
-
     const isDuplicateUsername = user.some((item) => item.username === username);
     if (isDuplicateUsername) {
       setError((prevError) => ({
@@ -100,7 +95,7 @@ const SignUpScreen = ({ navigation }) => {
     const allergyError = validateAllergy(allergy);
     const favoriteFoodsError = validateFavoriteFoods(favoriteFoods);
     const dietHabitError = validateDietHabit(dietHabit);
-  
+
     setError({
       name: nameError,
       username: usernameError,
@@ -110,7 +105,7 @@ const SignUpScreen = ({ navigation }) => {
       favoriteFoods: favoriteFoodsError,
       dietHabit: dietHabitError,
     });
-  
+
     if (
       !nameError &&
       !usernameError &&
@@ -120,14 +115,12 @@ const SignUpScreen = ({ navigation }) => {
       !favoriteFoodsError &&
       !dietHabitError
     ) {
-      
-
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Signed in 
+          // Signed in
           const user = userCredential.user;
-          console.log('user signed in');
+          console.log('User signed in');
           console.log(user);
 
           storeUserItem({
@@ -138,20 +131,18 @@ const SignUpScreen = ({ navigation }) => {
             allergy: allergy,
             favoriteFoods: favoriteFoods,
             dietHabit: dietHabit,
-            uid: user.uid
+            uid: user.uid,
           });
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(error);
-          // ..
         });
+
       navigation.navigate('Login');
     }
   };
-  
 
   return (
     <View style={styles.container}>
@@ -233,7 +224,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF6F61',
     borderRadius: 10,
     paddingVertical: 12,
     marginTop: 20,
@@ -250,7 +241,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
   },
-  
 });
 
 export default SignUpScreen;
