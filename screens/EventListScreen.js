@@ -13,10 +13,14 @@ const EventListScreen = ({ navigation, route }) => {
     const goToEventDetails = () => {
       navigation.navigate('EventDetails', { eventId: item.id });
     };
-
+  
+    const isHostEvent = eventsAsHost.some((event) => event.id === item.id);
+  
+    const eventItemStyle = isHostEvent ? styles.hostEventItem : styles.guestEventItem;
+  
     return (
       <TouchableOpacity onPress={goToEventDetails} style={styles.eventItemContainer}>
-        <View style={styles.eventItem}>
+        <View style={[styles.eventItem, eventItemStyle]}>
           <Text style={styles.eventTitle}>{item.title}</Text>
           <Text style={styles.eventDate}>{item.date}</Text>
           <Text style={styles.eventLocation}>{item.location}</Text>
@@ -24,6 +28,7 @@ const EventListScreen = ({ navigation, route }) => {
       </TouchableOpacity>
     );
   };
+  
 
   useEffect(() => {
     const auth = getAuth();
@@ -147,6 +152,35 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+
+  hostEventItem: {
+    backgroundColor: '#FFE8D6', // Lighter background color for host events
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  guestEventItem: {
+    backgroundColor: '#D6EDFF', // Lighter background color for guest events
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
 });
 
