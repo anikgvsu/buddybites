@@ -24,18 +24,26 @@ const EventDetailsScreen = ({ route }) => {
     );
   }
 
+  const { title, date, location, description, guests, allergies } = event;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{event.title}</Text>
-      <Text style={styles.subtitle}>Date: {event.date}</Text>
-      <Text style={styles.subtitle}>Location: {event.location}</Text>
-      <Text style={styles.description}>{event.description}</Text>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.subtitle}>Date: {date}</Text>
+      <Text style={styles.subtitle}>Location: {location}</Text>
+      <Text style={styles.description}>{description}</Text>
+
+      {allergies && (
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitle}>Allergies:</Text>
+          <Text style={styles.allergyText}>{allergies}</Text>
+        </View>
+      )}
 
       <Text style={styles.sectionTitle}>Guests:</Text>
-      {event.guests.map((guest, index) => (
+      {guests.map((guest, index) => (
         <View key={index} style={styles.guestContainer}>
           <Text style={styles.guestName}>{guest.name}</Text>
-          <Text style={styles.guestInfo}>Allergy: {guest.allergy}</Text>
           <Text style={styles.guestInfo}>Favorite Foods: {guest.favoriteFoods}</Text>
           <Text style={styles.guestInfo}>Diet Habits: {guest.dietHabit}</Text>
         </View>
@@ -62,10 +70,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 20,
   },
+  sectionContainer: {
+    marginTop: 20,
+  },
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 20,
+    marginBottom: 10,
+  },
+  allergyText: {
+    fontSize: 16,
   },
   guestContainer: {
     marginTop: 10,

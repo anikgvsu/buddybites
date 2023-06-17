@@ -96,13 +96,23 @@ export function getUsersAndEvents(hostId, callback) {
             const guest = users[guestUid];
             return {
               name: guest?.name || "",
-              allergy: guest?.allergy || "",
               favoriteFoods: guest?.favoriteFoods || "",
               dietHabit: guest?.dietHabit || "",
             };
           });
   
+          const allergies = guestList
+            .map((guestUid) => {
+              const guest = users[guestUid];
+              return guest?.allergy || "";
+            })
+            .filter((allergy) => allergy !== ""); // Exclude empty allergies
+
+          const allergiesString = allergies.join(", ");
+
+  
           eventData.guests = guests;
+          eventData.allergies = allergiesString;
           callback(eventData);
         });
       } else {
@@ -110,6 +120,7 @@ export function getUsersAndEvents(hostId, callback) {
       }
     });
   }
+  
   
 
 
