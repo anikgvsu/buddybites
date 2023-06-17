@@ -13,7 +13,6 @@ import {
 } from "../helpers/fb-db";
 
 const EventAddScreen = ({ navigation, route }) => {
-
   const { locationName } = route.params ?? { locationName: '' };
   const { locationLat } = route.params ?? { locationLat: '' };
   const { locationLong } = route.params ?? { locationLong: '' };
@@ -29,20 +28,16 @@ const EventAddScreen = ({ navigation, route }) => {
   const [dateError, setDateError] = useState('');
   const [location, setLocation] = useState('');
   const [locationError, setLocationError] = useState('');
-  const [selectedGuestList, setSelectedGuestList] = useState();
-
+  const [selectedGuestList, setSelectedGuestList] = useState([]);
 
   useEffect(() => {
-
     let isMounted = true;
 
     try {
-
       const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
         if (user) {
           // User is signed in
-
           const userSignOut = () => {
             signOut(auth)
               .then(() => {
@@ -51,38 +46,32 @@ const EventAddScreen = ({ navigation, route }) => {
               })
               .catch((error) => console.log(error));
           };
-      
+
           navigation.setOptions({
             headerRight: () => (
-              <TouchableOpacity
-                onPress={userSignOut}
-              >
-                <View>
+              <TouchableOpacity onPress={userSignOut}>
+                <View style={styles.signOutButton}>
                   <Text style={styles.signOutButtonText}>Logout</Text>
                 </View>
               </TouchableOpacity>
             ),
           });
-          // ...
         } else {
-
-          // console.log('user is signed out');
-          navigation.navigate('Login');
           // User is signed out
-          // ...
-          
+          navigation.navigate('Login');
         }
       });
-      
     } catch (err) {
       console.log(err);
     }
 
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleMapEvent = () => {
-    
-    navigation.navigate("Map", {hostUid: hostUid, guestList: guestList});
+    navigation.navigate("Map", { hostUid: hostUid, guestList: guestList });
   };
 
   useEffect(() => {
@@ -90,12 +79,11 @@ const EventAddScreen = ({ navigation, route }) => {
       const { locationName } = route.params ?? { locationName: '' };
       setLocation(locationName);
     });
-  
+
     return unsubscribe;
   }, [navigation, route.params]);
 
   const handleSaveEvent = () => {
-    // console.log(guestList)
     setTitleError('');
     setDateError('');
     setLocationError('');
@@ -105,7 +93,7 @@ const EventAddScreen = ({ navigation, route }) => {
     const dateError = date.trim() === '';
     const locationError = location.trim() === '';
     const descriptionError = description.trim() === '';
-  
+
     if (titleError) {
       setTitleError('Title is required');
     }
@@ -113,45 +101,42 @@ const EventAddScreen = ({ navigation, route }) => {
     if (descriptionError) {
       setDescriptionError('Description is required');
     }
-  
+
     if (dateError) {
       setDateError('Date is required');
     }
-  
+
     if (locationError) {
       setLocationError('Location is required');
     }
 
-    if (
-      !titleError &&
-      !dateError &&
-      !locationError &&
-      !descriptionError
-    ) {
-      storeEventItem({ 
-        title: title, 
+    if (!titleError && !dateError && !locationError && !descriptionError) {
+      storeEventItem({
+        title: title,
         description: description,
-        date: date, 
-        location: location, 
+        date: date,
+        location: location,
         guestList: selectedGuestList,
-        hostUid: hostUid
+        hostUid: hostUid,
       });
 
       getUsersAndEvents(hostUid, (users, eventsAsHost, eventsAsGuest) => {
         if (users || eventsAsHost || eventsAsGuest) {
-
           const guestList = users.map((item) => ({ id: item.uid, name: item.name }));
-          navigation.navigate("EventList", { hostUid: hostUid, guestList: guestList, eventsAsHost: eventsAsHost, eventsAsGuest: eventsAsGuest });
+          navigation.navigate("EventList", {
+            hostUid: hostUid,
+            guestList: guestList,
+            eventsAsHost: eventsAsHost,
+            eventsAsGuest: eventsAsGuest,
+          });
         }
       });
     }
-  
-    
   };
-  
 
   return (
     <View style={styles.container}>
+      <Text style={styles.heading}>Add Event</Text>
       <TextInput
         style={styles.input}
         placeholder="Title"
@@ -161,13 +146,13 @@ const EventAddScreen = ({ navigation, route }) => {
       {titleError ? <Text style={styles.error}>{titleError}</Text> : null}
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, styles.descriptionInput]}
         placeholder="Description"
         value={description}
         onChangeText={setDescription}
+        multiline
       />
       {descriptionError ? <Text style={styles.error}>{descriptionError}</Text> : null}
-
 
       <TextInput
         style={styles.input}
@@ -185,33 +170,35 @@ const EventAddScreen = ({ navigation, route }) => {
       />
       {locationError ? <Text style={styles.error}>{locationError}</Text> : null}
 
-      <TouchableOpacity style={styles.button} onPress={handleMapEvent}>
+      <TouchableOpacity style={styles.mapButton} onPress={handleMapEvent}>
         <Text style={styles.buttonText}>Add Location from Map</Text>
       </TouchableOpacity>
 
-      <View>
-      <MultiSelect
-        items={guestList}
-        uniqueKey="id"
-        onSelectedItemsChange={setSelectedGuestList}
-        selectedItems={selectedGuestList}
-        selectText="Select Options"
-        searchInputPlaceholderText="Search Options..."
-        onChangeInput={(text) => console.log(text)}
-        tagRemoveIconColor="#CCC"
-        tagBorderColor="#CCC"
-        tagTextColor="#CCC"
-        selectedItemTextColor="#CCC"
-        selectedItemIconColor="#CCC"
-        itemTextColor="#000"
-        displayKey="name"
-        searchInputStyle={{ color: '#CCC' }}
-        submitButtonColor="#33E6FF"
-        submitButtonText="Confirm"
-      />
-    </View>
-      
-      <TouchableOpacity style={styles.button} onPress={handleSaveEvent}>
+      <View style={styles.guestListContainer}>
+        <Text style={styles.label}>Guest List</Text>
+        <MultiSelect
+          items={guestList}
+          uniqueKey="id"
+          onSelectedItemsChange={setSelectedGuestList}
+          selectedItems={selectedGuestList}
+          selectText="Select Options"
+          searchInputPlaceholderText="Search Options..."
+          onChangeInput={(text) => console.log(text)}
+          tagRemoveIconColor="#CCC"
+          tagBorderColor="#CCC"
+          tagTextColor="#CCC"
+          selectedItemTextColor="#CCC"
+          selectedItemIconColor="#CCC"
+          itemTextColor="#000"
+          displayKey="name"
+          searchInputStyle={{ color: '#CCC' }}
+          submitButtonColor="#33E6FF"
+          submitButtonText="Confirm"
+          style={styles.multiSelect}
+        />
+      </View>
+
+      <TouchableOpacity style={styles.saveButton} onPress={handleSaveEvent}>
         <Text style={styles.buttonText}>Save Event</Text>
       </TouchableOpacity>
     </View>
@@ -223,6 +210,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#F9F9F9',
+  },
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
   },
   input: {
     height: 40,
@@ -230,35 +224,31 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+    backgroundColor: '#FFFFFF',
   },
-  dropdownButton: {
+  descriptionInput: {
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  mapButton: {
     backgroundColor: '#007AFF',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
+    borderRadius: 10,
+    paddingVertical: 12,
+    marginTop: 20,
+    alignItems: 'center',
   },
-  dropdownButtonText: {
-    color: 'white',
+  guestListContainer: {
+    marginTop: 20,
+  },
+  label: {
     fontSize: 16,
     fontWeight: 'bold',
+    marginBottom: 10,
   },
-  dropdownContainer: {
-    backgroundColor: '#FFF',
-    borderColor: '#CCC',
-    borderWidth: 1,
-    borderRadius: 5,
+  multiSelect: {
     marginTop: 10,
   },
-  dropdownItem: {
-    padding: 10,
-    backgroundColor: '#FFF',
-    borderBottomColor: '#CCC',
-    borderBottomWidth: 1,
-  },
-  dropdownItemText: {
-    fontSize: 16,
-  },
-  button: {
+  saveButton: {
     backgroundColor: '#007AFF',
     borderRadius: 10,
     paddingVertical: 12,
@@ -270,13 +260,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-
   error: {
     color: 'red',
     fontSize: 16,
     marginBottom: 10,
   },
-
+  signOutButton: {
+    padding: 10,
+  },
   signOutButtonText: {
     color: 'white',
     fontSize: 16,
