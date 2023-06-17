@@ -106,7 +106,7 @@ export function getUsersAndEvents(hostId, callback) {
               const guest = users[guestUid];
               return guest?.allergy || "";
             })
-            .filter((allergy) => allergy !== ""); // Exclude empty allergies
+            .filter((allergy) => allergy !== "");
 
           const allergiesString = allergies.join(", ");
 
