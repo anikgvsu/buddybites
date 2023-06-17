@@ -186,15 +186,16 @@ const EventAddScreen = ({ navigation, route }) => {
           onChangeInput={(text) => console.log(text)}
           tagRemoveIconColor="#CCC"
           tagBorderColor="#CCC"
-          tagTextColor="#CCC"
-          selectedItemTextColor="#CCC"
-          selectedItemIconColor="#CCC"
+          tagTextColor="#333"
+          selectedItemTextColor="#333"
+          selectedItemIconColor="#333"
           itemTextColor="#000"
           displayKey="name"
-          searchInputStyle={{ color: '#CCC' }}
+          searchInputStyle={{ color: '#333' }}
           submitButtonColor="#FFB86F"
           submitButtonText="Confirm"
           style={styles.multiSelect}
+          selectedItemsTextStyle={styles.selectedItemsText}
         />
       </View>
 
@@ -247,6 +248,10 @@ const styles = StyleSheet.create({
   },
   multiSelect: {
     marginTop: 10,
+  },
+  selectedItemsText: {
+    color: '#333',
+    fontWeight: 'bold',
   },
   saveButton: {
     backgroundColor: '#FF6F61',
