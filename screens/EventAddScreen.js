@@ -82,8 +82,17 @@ const EventAddScreen = ({ navigation, route }) => {
 
   const handleMapEvent = () => {
     
-    navigation.navigate("Map");
+    navigation.navigate("Map", {hostUid: hostUid, guestList: guestList});
   };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      const { locationName } = route.params ?? { locationName: '' };
+      setLocation(locationName);
+    });
+  
+    return unsubscribe;
+  }, [navigation, route.params]);
 
   const handleSaveEvent = () => {
     // console.log(guestList)

@@ -1,12 +1,16 @@
 import MapView, {Marker, Circle, Callout} from 'react-native-maps';
 import axios from 'axios';
 import { maps_KEY } from "../api/api_key.js";
-import { Text, StyleSheet, View, TextInput, SafeAreaView } from 'react-native';
+import { Text, StyleSheet, View, TextInput, TouchableOpacity } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { useEffect, useState } from 'react';
 import Geocoder from 'react-native-geocoding';
 
-const AddressSearchBar = () => {
+const AddressSearchBar = ({navigation, route}) => {
+
+	const { hostUid } = route.params ?? { hostUid: null };
+  	const { guestList } = route.params ?? { guestList: [] };
+
   const [ pin, setPin ] = useState({
 		latitude: 42.97218609999999,
 		longitude: -85.95402179999999,
@@ -21,7 +25,32 @@ const AddressSearchBar = () => {
 		longitude: -85.95402179999999,
 		latitudeDelta: 0.0922,
 		longitudeDelta: 0.0421
-	})
+	});
+
+	const handleSaveEvent = () => {
+
+		navigation.navigate("EventAdd", {
+		  hostUid: hostUid,
+		  guestList: guestList,
+		  locationName: pin.address,
+		  locationLat: pin.latitude,
+		  locationLong: pin.longitude
+		});
+	  };
+	  
+
+	useEffect(() => {
+		navigation.setOptions({
+		  headerRight: () => (
+		    <TouchableOpacity
+		      onPress={handleSaveEvent}
+		    >
+		      <Text style={styles.headerButton}>Save</Text>
+		    </TouchableOpacity>
+		  ),
+		});
+	  });
+
 	useEffect(() => {
 		Geocoder.init(maps_KEY); // Initialize Geocoder with your API key
 	  }, [pin]);
@@ -110,4 +139,10 @@ map: {
   width: '100%',
   height: '100%',
 },
+headerButton: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginHorizontal: 10,
+  },
 });
