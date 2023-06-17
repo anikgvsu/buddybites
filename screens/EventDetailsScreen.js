@@ -40,14 +40,16 @@ const EventDetailsScreen = ({ route }) => {
         </View>
       )}
 
-      <Text style={styles.sectionTitle}>Guests:</Text>
-      {guests.map((guest, index) => (
-        <View key={index} style={styles.guestContainer}>
-          <Text style={styles.guestName}>{guest.name}</Text>
-          <Text style={styles.guestInfo}>Favorite Foods: {guest.favoriteFoods}</Text>
-          <Text style={styles.guestInfo}>Diet Habits: {guest.dietHabit}</Text>
-        </View>
-      ))}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Guests:</Text>
+        {guests.map((guest, index) => (
+          <View key={index} style={styles.guestContainer}>
+            <Text style={styles.guestName}>{guest.name}</Text>
+            <Text style={styles.guestInfo}>Favorite Foods: {guest.favoriteFoods}</Text>
+            <Text style={styles.guestInfo}>Diet Habits: {guest.dietHabit}</Text>
+          </View>
+        ))}
+      </View>
     </View>
   );
 };
@@ -56,41 +58,58 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#F9F9F9',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#333',
   },
   subtitle: {
     fontSize: 18,
     marginBottom: 5,
+    color: '#666',
   },
   description: {
     fontSize: 16,
     marginTop: 20,
+    color: '#555',
+    lineHeight: 24,
   },
   sectionContainer: {
     marginTop: 20,
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    padding: 16,
+    elevation: 2,
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#333',
   },
   allergyText: {
     fontSize: 16,
+    color: '#666',
   },
   guestContainer: {
     marginTop: 10,
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    padding: 16,
+    elevation: 2,
   },
   guestName: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#333',
   },
   guestInfo: {
     fontSize: 14,
     marginTop: 5,
+    color: '#555',
   },
 });
 
