@@ -23,8 +23,10 @@ FoodServer.interceptors.request.use(
 );
 
 export const getFoodFacts = async (ingredients, callback) => {
+    ingredients = ingredients.toLowerCase();
+    const recipeQuery = `?tags=${ingredients}&apiKey=${apiKey}&number=1`;
     const response = await FoodServer.get(
-        `?tags=${ingredients}&apiKey=${apiKey}&number=1`
+        recipeQuery
     );
     callback(response.data)
 };
