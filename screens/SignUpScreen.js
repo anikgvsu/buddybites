@@ -3,13 +3,15 @@ import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-nativ
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
+
 import {
   getAllUsers,
   initFirebase,
   storeUserItem,
+  getUsersAndEvents
 } from "../helpers/fb-db";
 
-const SignUpScreen = ({ navigation }) => {
+const SignUpScreen = ({navigation}) => {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -125,8 +127,9 @@ const SignUpScreen = ({ navigation }) => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
+          const userUid = user.uid;
           console.log('User signed in');
-          console.log(user);
+          // console.log(user);
 
           storeUserItem({
             name: name,
@@ -136,16 +139,22 @@ const SignUpScreen = ({ navigation }) => {
             allergy: allergy,
             favoriteFoods: favoriteFoods,
             dietHabit: dietHabit,
-            uid: user.uid,
+            uid: userUid,
           });
+
+          getUsersAndEvents(userUid, (users, eventsAsHost, eventsAsGuest) => {
+            if (users || eventsAsHost || eventsAsGuest) {
+              const guestList = users.map((item) => ({ id: item.uid, name: item.name }));
+              navigation.navigate("EventList", { hostUid: userUid, guestList, eventsAsHost, eventsAsGuest });
+            }
+          });
+
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(error);
         });
-
-      navigation.navigate('Login');
     }
   };
 
