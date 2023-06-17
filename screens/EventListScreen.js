@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#fff',
   },
   headerButton: {
     color: 'white',
@@ -123,10 +124,12 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#333',
   },
   eventDate: {
     fontSize: 16,
     marginTop: 5,
+    color: '#666',
   },
   eventLocation: {
     fontSize: 14,
@@ -134,7 +137,7 @@ const styles = StyleSheet.create({
   },
   surpriseRecipeButton: {
     marginTop: 20,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF6F61',
     borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 24,
