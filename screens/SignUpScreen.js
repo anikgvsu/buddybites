@@ -126,7 +126,7 @@ const SignUpScreen = ({ navigation }) => {
           storeUserItem({
             name: name,
             username: username,
-            password: password,
+            // password: password,
             email: email,
             allergy: allergy,
             favoriteFoods: favoriteFoods,
