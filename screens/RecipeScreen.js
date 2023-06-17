@@ -138,9 +138,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   headerButton: {
-    color: '#fff',
+    color: 'white',
+    fontSize: 16,
     fontWeight: 'bold',
-    margin: 10,
+    marginHorizontal: 10,
   },
 });
 
