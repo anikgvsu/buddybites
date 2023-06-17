@@ -1,142 +1,136 @@
 import React, { useState, useEffect } from 'react';
-import { View,ScrollView, FlatList, Image, TextInput, StyleSheet, Text, Button, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Image, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 
-import {getFoodFacts} from '../api/FoodAPI.js';
+import { getFoodFacts } from '../api/FoodAPI.js';
 
 const RecipeScreen = ({ navigation }) => {
   const { width } = useWindowDimensions();
-  const [ingredients, setIngredients] = useState("");
+  const [ingredients, setIngredients] = useState('');
   const [recipe, setRecipe] = useState({
     image: '',
     title: '',
     instruction: '',
     summary: '',
-  })
+  });
 
   const getRecipe = () => {
     getFoodFacts(ingredients, (data) => {
-      console.log(data.recipes[0].image);
 
-      // console.log("food data here",data, data.recipes[0].image, data.recipes[0].instructions, data.recipes[0].summary);
-      setRecipe({image: data.recipes[0].image, instruction: data.recipes[0].instructions, 
-        summary: data.recipes[0].summary, title: data.recipes[0].title})
-    });
-  }
-  const renderRecipe = (recipe) => {
-      if (recipe.title === '') {
-        return <View></View>;
-      } else {
-        return (
-          <ScrollView contentContainerStyle={styles.weatherView}>
-            <Image
-              style={styles.recipeImage}
-              source={{
-                uri: recipe.image,
-              }}
-            />
-            <View>
-              <Text style={styles.recipeTitle}>
-                {recipe.title}
-              </Text>
-              <Text style={styles.description}>
-              <RenderHtml contentWidth={width} source={{html:recipe.instruction}}/>
-              <RenderHtml contentWidth={width} source={{html:recipe.summary}}/>
-              </Text>
-            </View>
-            </ScrollView>
-        );
-      }
-    };
-
-    useEffect(() => {
-      navigation.setOptions({
-        headerLeft: () => (
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("EventList")
-            }
-          >
-            <View style={styles.addButton}>
-              <Text style={styles.addButtonText}>Back</Text>
-            </View>
-          </TouchableOpacity>
-        ),
+      setRecipe({
+        image: data.recipes[0].image,
+        instruction: data.recipes[0].instructions,
+        summary: data.recipes[0].summary,
+        title: data.recipes[0].title,
       });
     });
-    return (
-        <View style={styles.container}>
-          <View>
-            <TextInput
-              style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-              onChangeText={setIngredients}
-              value={ingredients}
-              placeholder="type ingrediants saparated by commas..."
-            />
-            <Button title="Get Recepie" onPress={getRecipe} />
+  };
+
+  const renderRecipe = (recipe) => {
+    if (recipe.title === '') {
+      return <View></View>;
+    } else {
+      return (
+        <ScrollView contentContainerStyle={styles.recipeContainer}>
+          <Image style={styles.recipeImage} source={{ uri: recipe.image }} />
+          <View style={styles.recipeContent}>
+            <Text style={styles.recipeTitle}>{recipe.title}</Text>
+            <View style={styles.recipeDescription}>
+              <RenderHtml contentWidth={width} source={{ html: recipe.instruction }} />
+              <RenderHtml contentWidth={width} source={{ html: recipe.summary }} />
+            </View>
           </View>
-          {renderRecipe(recipe)}
-        </View>
-    );
+        </ScrollView>
+      );
+    }
+  };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.navigate('EventList')}>
+          <Text style={styles.headerButton}>Back</Text>
+        </TouchableOpacity>
+      ),
+    });
+  });
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          onChangeText={setIngredients}
+          value={ingredients}
+          placeholder="Type ingredients separated by commas..."
+        />
+        <TouchableOpacity style={styles.button} onPress={getRecipe}>
+          <Text style={styles.buttonText}>Get Recipe</Text>
+        </TouchableOpacity>
+      </View>
+      {renderRecipe(recipe)}
+    </View>
+  );
 };
 
-
-
-  const styles = StyleSheet.create({
-    weatherView: {
-      flexDirection: 'column',
-      alignItems: 'center',
-      marginTop: 50,
-      marginBottom: 20,
-    },
-    recipeImage: {
-      width: 200,
-      height: 200,
-    },
-    weatherDetails: {
-      marginLeft: 10,
-    },
-    recipeTitle: {
-      fontSize: 30,
-      marginTop: 20,
-      fontWeight: 'bold',
-      textAlign: 'center',
-    },
-    description: {
-      fontSize: 18,
-      marginRight: 20,
-      marginLeft: 20,
-    },
-    container: {
-      padding: 10,
-      backgroundColor: "#E8EAF6",
-      flex: 1,
-    },
-    headerButton: {
-      color: "#fff",
-      fontWeight: "bold",
-      margin: 10,
-    },
-    buttons: {
-      padding: 10,
-    },
-    addButton: {
-      // position: 'absolute',
-      // top: 10,
-      // right: 10,
-      // backgroundColor: '#007AFF',
-      // borderRadius: 10,
-      // paddingVertical: 8,
-      // paddingHorizontal: 16,
-      // elevation: 2,
-    },
-    addButtonText: {
-      color: 'white',
-      fontSize: 16,
-      fontWeight: 'bold',
-      margin: 20,
-    },
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#E8EAF6',
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  recipeContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    marginTop: 50,
+    marginBottom: 20,
+  },
+  recipeImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+  },
+  recipeContent: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  recipeTitle: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  recipeDescription: {
+    marginHorizontal: 20,
+  },
+  headerButton: {
+    color: '#fff',
+    fontWeight: 'bold',
+    margin: 10,
+  },
 });
 
 export default RecipeScreen;
