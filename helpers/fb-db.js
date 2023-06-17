@@ -78,12 +78,39 @@ export function getUsersAndEvents(hostId, callback) {
     onValue(reference, (snapshot) => {
       if (snapshot?.val()) {
         const eventData = snapshot.val();
-        callback(eventData);
+  
+        const guestList = eventData.guestList || [];
+        const userReference = ref(db, "userData/");
+  
+        onValue(userReference, (userSnapshot) => {
+          const users = {};
+          if (userSnapshot?.val()) {
+            const fbUserObject = userSnapshot.val();
+            Object.keys(fbUserObject).forEach((key) => {
+              const user = { ...fbUserObject[key], id: key };
+              users[user.uid] = user;
+            });
+          }
+  
+          const guests = guestList.map((guestUid) => {
+            const guest = users[guestUid];
+            return {
+              name: guest?.name || "",
+              allergy: guest?.allergy || "",
+              favoriteFoods: guest?.favoriteFoods || "",
+              dietHabit: guest?.dietHabit || "",
+            };
+          });
+  
+          eventData.guests = guests;
+          callback(eventData);
+        });
       } else {
         callback(null);
       }
     });
   }
+  
 
 
 export function storeUserItem(item) {
