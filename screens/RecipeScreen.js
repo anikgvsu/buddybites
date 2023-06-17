@@ -37,7 +37,7 @@ const RecipeScreen = ({ navigation, route }) => {
     } else {
       return (
         <ScrollView contentContainerStyle={styles.recipeContainer}>
-          <Image style={styles.recipeImage} source={{ uri: recipe.image }} />
+          {/* <Image style={styles.recipeImage} source={{ uri: recipe.image }} /> */}
           <View style={styles.recipeContent}>
             <Text style={styles.recipeTitle}>{recipe.title}</Text>
             <View style={styles.recipeDescription}>
