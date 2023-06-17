@@ -63,7 +63,7 @@ const EventListScreen = ({ navigation, route }) => {
   }, []);
 
   const goToRecipe = () => {
-    navigation.navigate('Recipe');
+    navigation.navigate('Recipe', { hostUid, guestList, eventsAsHost, eventsAsGuest });
   };
 
   return (

@@ -5,7 +5,13 @@ import RenderHtml from 'react-native-render-html';
 
 import { getFoodFacts } from '../api/FoodAPI.js';
 
-const RecipeScreen = ({ navigation }) => {
+const RecipeScreen = ({ navigation, route }) => {
+
+  const { hostUid } = route.params ?? { hostUid: null };
+  const { eventsAsHost } = route.params ?? { eventsAsHost: [] };
+  const { eventsAsGuest } = route.params ?? { eventsAsGuest: [] };
+  const { guestList } = route.params ?? { guestList: [] };
+  
   const { width } = useWindowDimensions();
   const [ingredients, setIngredients] = useState('');
   const [recipe, setRecipe] = useState({
@@ -46,11 +52,16 @@ const RecipeScreen = ({ navigation }) => {
     }
   };
 
+  const goToEventList = () => {
+
+    navigation.navigate("EventList", { hostUid: hostUid, guestList: guestList, eventsAsHost: eventsAsHost, eventsAsGuest: eventsAsGuest });
+  }
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
-        <TouchableOpacity onPress={() => navigation.navigate('EventList')}>
-          <Text style={styles.headerButton}>Back</Text>
+        <TouchableOpacity onPress={goToEventList}>
+          <Text style={styles.headerButton}>Event List</Text>
         </TouchableOpacity>
       ),
     });
