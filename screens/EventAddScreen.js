@@ -136,7 +136,7 @@ const EventAddScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Add Event</Text>
+      {/* <Text style={styles.heading}>Add Event</Text> */}
       <TextInput
         style={styles.input}
         placeholder="Title"
@@ -181,8 +181,8 @@ const EventAddScreen = ({ navigation, route }) => {
           uniqueKey="id"
           onSelectedItemsChange={setSelectedGuestList}
           selectedItems={selectedGuestList}
-          selectText="Select Options"
-          searchInputPlaceholderText="Search Options..."
+          selectText="Select Guests"
+          searchInputPlaceholderText="Search Guests..."
           onChangeInput={(text) => console.log(text)}
           tagRemoveIconColor="#CCC"
           tagBorderColor="#CCC"
@@ -192,7 +192,7 @@ const EventAddScreen = ({ navigation, route }) => {
           itemTextColor="#000"
           displayKey="name"
           searchInputStyle={{ color: '#CCC' }}
-          submitButtonColor="#33E6FF"
+          submitButtonColor="#FFB86F"
           submitButtonText="Confirm"
           style={styles.multiSelect}
         />
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   mapButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FFB86F',
     borderRadius: 10,
     paddingVertical: 12,
     marginTop: 20,
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   saveButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF6F61',
     borderRadius: 10,
     paddingVertical: 12,
     marginTop: 20,
