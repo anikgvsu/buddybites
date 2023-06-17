@@ -6,6 +6,7 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 const EventListScreen = ({ navigation, route }) => {
 
+  const { hostUid } = route.params ?? { hostUid: null };
   const { eventsAsHost } = route.params ?? { eventsAsHost: [] };
   const { eventsAsGuest } = route.params ?? { eventsAsGuest: [] };
   const { guestList } = route.params ?? { guestList: [] };
@@ -63,11 +64,11 @@ const EventListScreen = ({ navigation, route }) => {
       ),
       headerRight: () => (
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("EventAdd")
-          }
+          onPress={() => {
+            navigation.navigate("EventAdd", { hostUid: hostUid, guestList: guestList });
+          }}
         >
-          <View style={styles.addButton}>
+          <View>
             <Text style={styles.addButtonText}>Add Event</Text>
           </View>
         </TouchableOpacity>
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
-  button: {
+  addButton: {
     position: 'absolute',
     top: 10,
     right: 10,
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
-    margin:20,
+    // margin:20,
   },
 
   signOutButtonText: {

@@ -60,6 +60,9 @@ const LoginScreen = ({ navigation }) => {
           getUsersAndEvents(userUid, (users, eventsAsHost, eventsAsGuest) => {
             if (users || eventsAsHost || eventsAsGuest) {
 
+              console.log('guests');
+              console.log(users);
+
               console.log('events as host');
               console.log(eventsAsHost);
 
@@ -67,10 +70,8 @@ const LoginScreen = ({ navigation }) => {
               console.log(eventsAsGuest);
 
               const guestList = users.map((item) => ({ id: item.uid, name: item.name }));
-              navigation.navigate("EventList", { guestList: guestList, eventsAsHost: eventsAsHost, eventsAsGuest: eventsAsGuest });
-            } else {
-              setEvent(null);
-          }
+              navigation.navigate("EventList", { hostUid: userUid, guestList: guestList, eventsAsHost: eventsAsHost, eventsAsGuest: eventsAsGuest });
+            }
           });
 
           
