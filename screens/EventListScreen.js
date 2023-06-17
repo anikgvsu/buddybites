@@ -110,10 +110,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 10,
+    color: '#333',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    borderBottomWidth: 2,
+    borderBottomColor: '#FF6F61',
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
   eventList: {
     flexGrow: 1,
@@ -155,7 +163,7 @@ const styles = StyleSheet.create({
   },
 
   hostEventItem: {
-    backgroundColor: '#FFE8D6', // Lighter background color for host events
+    backgroundColor: '#FFE8D6',
     borderRadius: 8,
     padding: 10,
     marginBottom: 10,
@@ -169,7 +177,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   guestEventItem: {
-    backgroundColor: '#D6EDFF', // Lighter background color for guest events
+    backgroundColor: '#D6EDFF',
     borderRadius: 8,
     padding: 10,
     marginBottom: 10,
