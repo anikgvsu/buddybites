@@ -75,7 +75,7 @@ export default function App() {
 
 const navStyling = {
   headerStyle: {
-    backgroundColor: "#0065A4",
+    backgroundColor: "#FF8C00",
     height: 80,
     elevation: 0,
   },
@@ -89,6 +89,6 @@ const navStyling = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F5F5F5",
   },
 });
