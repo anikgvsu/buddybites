@@ -5,7 +5,7 @@ import RenderHtml from 'react-native-render-html';
 
 import {getFoodFacts} from '../api/FoodAPI.js';
 
-const RecepieScreen = ({ navigation }) => {
+const RecipeScreen = ({ navigation }) => {
   const { width } = useWindowDimensions();
   const [ingredients, setIngredients] = useState("");
   const [recipe, setRecipe] = useState({
@@ -139,4 +139,4 @@ const RecepieScreen = ({ navigation }) => {
     },
 });
 
-export default RecepieScreen;
+export default RecipeScreen;
