@@ -74,17 +74,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     color: '#333',
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 18,
     marginBottom: 5,
     color: '#888',
+    textAlign: 'center',
   },
   description: {
     fontSize: 16,
     marginTop: 20,
     color: '#555',
     lineHeight: 24,
+    textAlign: 'justify',
   },
   sectionContainer: {
     marginTop: 20,
