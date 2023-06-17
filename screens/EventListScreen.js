@@ -90,7 +90,7 @@ const EventListScreen = ({ navigation, route }) => {
       />
 
       <TouchableOpacity style={styles.surpriseRecipeButton} onPress={goToRecipe}>
-        <Text style={styles.surpriseRecipeButtonText}>Surprise Recipe</Text>
+        <Text style={styles.surpriseRecipeButtonText}>Recipe</Text>
       </TouchableOpacity>
     </View>
   );

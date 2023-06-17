@@ -6,7 +6,6 @@ import RenderHtml from 'react-native-render-html';
 import { getFoodFacts } from '../api/FoodAPI.js';
 
 const RecipeScreen = ({ navigation, route }) => {
-
   const { hostUid } = route.params ?? { hostUid: null };
   const { eventsAsHost } = route.params ?? { eventsAsHost: [] };
   const { eventsAsGuest } = route.params ?? { eventsAsGuest: [] };
@@ -23,7 +22,6 @@ const RecipeScreen = ({ navigation, route }) => {
 
   const getRecipe = () => {
     getFoodFacts(ingredients, (data) => {
-
       setRecipe({
         image: data.recipes[0].image,
         instruction: data.recipes[0].instructions,
@@ -53,7 +51,6 @@ const RecipeScreen = ({ navigation, route }) => {
   };
 
   const goToEventList = () => {
-
     navigation.navigate("EventList", { hostUid: hostUid, guestList: guestList, eventsAsHost: eventsAsHost, eventsAsGuest: eventsAsGuest });
   }
 
@@ -64,15 +61,6 @@ const RecipeScreen = ({ navigation, route }) => {
           <Text style={styles.headerButton}>Event List</Text>
         </TouchableOpacity>
       ),
-      // headerRight: () => (
-      //   <TouchableOpacity
-      //     onPress={() =>
-      //       navigation.navigate("Map")
-      //     }
-      //   >
-      //     <Text style={styles.headerButton}>Map</Text>
-      //   </TouchableOpacity>
-      // ),
     });
   });
 
@@ -97,28 +85,30 @@ const RecipeScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    backgroundColor: '#E8EAF6',
+    padding: 20,
+    backgroundColor: '#fff',
   },
   inputContainer: {
     marginBottom: 20,
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#ccc',
     borderWidth: 1,
     paddingHorizontal: 10,
     marginBottom: 10,
+    borderRadius: 8,
+    backgroundColor: '#fff',
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF6F61',
     borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 24,
     alignItems: 'center',
   },
   buttonText: {
-    color: 'white',
+    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -138,16 +128,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   recipeTitle: {
-    fontSize: 30,
+    fontSize: 32,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
+    color: '#333',
   },
   recipeDescription: {
     marginHorizontal: 20,
   },
   headerButton: {
-    color: 'white',
+    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
     marginHorizontal: 10,
