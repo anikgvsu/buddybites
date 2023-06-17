@@ -26,14 +26,46 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={navStyling}>
-        <Stack.Screen name="Home" component={LandingScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="EventList" component={EventListScreen} />
-        <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
-        <Stack.Screen name="EventAdd" component={EventAddScreen} />
-        <Stack.Screen name="Recipe" component={RecipeScreen} />
-        <Stack.Screen name="Map" component={MapScreen} />
+      <Stack.Screen
+          name="Home"
+          component={LandingScreen}
+          options={{ title: "Home" }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUpScreen}
+          options={{ title: "Sign Up" }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ title: "Login" }}
+        />
+        <Stack.Screen
+          name="EventList"
+          component={EventListScreen}
+          options={{ title: "Event List" }}
+        />
+        <Stack.Screen
+          name="EventDetails"
+          component={EventDetailsScreen}
+          options={{ title: "Event Details" }}
+        />
+        <Stack.Screen
+          name="EventAdd"
+          component={EventAddScreen}
+          options={{ title: "Add Event" }}
+        />
+        <Stack.Screen
+          name="Recipe"
+          component={RecipeScreen}
+          options={{ title: "Recipe" }}
+        />
+        <Stack.Screen
+          name="Map"
+          component={MapScreen}
+          options={{ title: "Location" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
