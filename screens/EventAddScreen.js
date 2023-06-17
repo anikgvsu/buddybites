@@ -1,39 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import SelectDropdown from 'react-native-select-dropdown';
+import { View, TextInput, StyleSheet, Button, Text, TouchableOpacity } from 'react-native';
+import MultiSelect from 'react-native-multiple-select';
+
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { maps_KEY } from "../api/api_key.js";
 
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 import {
-  initEventDB,
-  setupEventListener,
   storeEventItem,
-} from "../helpers/fb-event";
+  getUsersAndEvents
+} from "../helpers/fb-db";
 
-const EventAddScreen = ({ navigation }) => {
+const EventAddScreen = ({ navigation, route }) => {
+  const { locationName } = route.params ?? { locationName: '' };
+  const { locationLat } = route.params ?? { locationLat: '' };
+  const { locationLong } = route.params ?? { locationLong: '' };
+
+  const { hostUid } = route.params ?? { hostUid: null };
+  const { guestList } = route.params ?? { guestList: [] };
 
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState('');
+  const [description, setDescription] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
   const [date, setDate] = useState('');
   const [dateError, setDateError] = useState('');
   const [location, setLocation] = useState('');
   const [locationError, setLocationError] = useState('');
-  const [guestList, setGuestList] = useState([]);
-
-
-  const [event, setEvent] = useState([]);
+  const [selectedGuestList, setSelectedGuestList] = useState([]);
 
   useEffect(() => {
-    try {
+    let isMounted = true;
 
+    try {
       const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
         if (user) {
           // User is signed in
-          const uid = user.uid;
-          console.log('user is signed in event add screen');
-          console.log(user.uid);
-
           const userSignOut = () => {
             signOut(auth)
               .then(() => {
@@ -42,94 +46,97 @@ const EventAddScreen = ({ navigation }) => {
               })
               .catch((error) => console.log(error));
           };
-      
+
           navigation.setOptions({
             headerRight: () => (
-              <TouchableOpacity
-                onPress={userSignOut}
-              >
-                <View>
+              <TouchableOpacity onPress={userSignOut}>
+                <View style={styles.signOutButton}>
                   <Text style={styles.signOutButtonText}>Logout</Text>
                 </View>
               </TouchableOpacity>
             ),
           });
-          // ...
         } else {
-
-          console.log('user is signed out');
-          navigation.navigate('Login');
           // User is signed out
-          // ...
-          
+          navigation.navigate('Login');
         }
       });
-
-      initEventDB();
     } catch (err) {
       console.log(err);
     }
-    setupEventListener((items) => {
-      setEvent(items);
-    });
 
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  const options = [
-    { 
-      value: 1,
-      label: "Leanne Graham"
-    },
-    {
-      value:  2,
-      label: "Ervin Howell"
-    }
-  ];
+  const handleMapEvent = () => {
+    navigation.navigate("Map", { hostUid: hostUid, guestList: guestList });
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      const { locationName } = route.params ?? { locationName: '' };
+      setLocation(locationName);
+    });
+
+    return unsubscribe;
+  }, [navigation, route.params]);
 
   const handleSaveEvent = () => {
-
     setTitleError('');
     setDateError('');
     setLocationError('');
+    setDescriptionError('');
 
     const titleError = title.trim() === '';
     const dateError = date.trim() === '';
     const locationError = location.trim() === '';
-  
+    const descriptionError = description.trim() === '';
+
     if (titleError) {
       setTitleError('Title is required');
     }
-  
+
+    if (descriptionError) {
+      setDescriptionError('Description is required');
+    }
+
     if (dateError) {
       setDateError('Date is required');
     }
-  
+
     if (locationError) {
       setLocationError('Location is required');
     }
 
-    if (
-      !titleError &&
-      !dateError &&
-      !locationError
-    ) {
-
-      storeEventItem({ 
-        title: title, 
-        date: date, 
-        location: location, 
-        guestList: guestList 
+    if (!titleError && !dateError && !locationError && !descriptionError) {
+      storeEventItem({
+        title: title,
+        description: description,
+        date: date,
+        location: location,
+        guestList: selectedGuestList,
+        hostUid: hostUid,
       });
 
-      navigation.navigate('EventList');
+      getUsersAndEvents(hostUid, (users, eventsAsHost, eventsAsGuest) => {
+        if (users || eventsAsHost || eventsAsGuest) {
+          const guestList = users.map((item) => ({ id: item.uid, name: item.name }));
+          navigation.navigate("EventList", {
+            hostUid: hostUid,
+            guestList: guestList,
+            eventsAsHost: eventsAsHost,
+            eventsAsGuest: eventsAsGuest,
+          });
+        }
+      });
     }
-  
-    
   };
-  
 
   return (
     <View style={styles.container}>
+      {/* <Text style={styles.heading}>Add Event</Text> */}
       <TextInput
         style={styles.input}
         placeholder="Title"
@@ -137,6 +144,15 @@ const EventAddScreen = ({ navigation }) => {
         onChangeText={setTitle}
       />
       {titleError ? <Text style={styles.error}>{titleError}</Text> : null}
+
+      <TextInput
+        style={[styles.input, styles.descriptionInput]}
+        placeholder="Description"
+        value={description}
+        onChangeText={setDescription}
+        multiline
+      />
+      {descriptionError ? <Text style={styles.error}>{descriptionError}</Text> : null}
 
       <TextInput
         style={styles.input}
@@ -154,26 +170,36 @@ const EventAddScreen = ({ navigation }) => {
       />
       {locationError ? <Text style={styles.error}>{locationError}</Text> : null}
 
-      <View>
-        <SelectDropdown
-          data={[
-            'John',
-            'Jane',
-            'Mark',
-          ]}
-          multiSelect
-          defaultButtonText="Choose Guest"
-          buttonStyle={styles.dropdownButton}
-          buttonTextStyle={styles.dropdownButtonText}
-          dropdownStyle={styles.dropdownContainer}
-          rowStyle={styles.dropdownItem}
-          rowTextStyle={styles.dropdownItemText}
-          dropdownIconPosition="right"
-          onSelect={(selectedItems) => setGuestList(selectedItems)}
+      <TouchableOpacity style={styles.mapButton} onPress={handleMapEvent}>
+        <Text style={styles.buttonText}>Add Location from Map</Text>
+      </TouchableOpacity>
+
+      <View style={styles.guestListContainer}>
+        <Text style={styles.label}>Guest List</Text>
+        <MultiSelect
+          items={guestList}
+          uniqueKey="id"
+          onSelectedItemsChange={setSelectedGuestList}
+          selectedItems={selectedGuestList}
+          selectText="Select Guests"
+          searchInputPlaceholderText="Search Guests..."
+          onChangeInput={(text) => console.log(text)}
+          tagRemoveIconColor="#CCC"
+          tagBorderColor="#CCC"
+          tagTextColor="#333"
+          selectedItemTextColor="#333"
+          selectedItemIconColor="#333"
+          itemTextColor="#000"
+          displayKey="name"
+          searchInputStyle={{ color: '#333' }}
+          submitButtonColor="#FFB86F"
+          submitButtonText="Confirm"
+          style={styles.multiSelect}
+          selectedItemsTextStyle={styles.selectedItemsText}
         />
       </View>
-      
-      <TouchableOpacity style={styles.button} onPress={handleSaveEvent}>
+
+      <TouchableOpacity style={styles.saveButton} onPress={handleSaveEvent}>
         <Text style={styles.buttonText}>Save Event</Text>
       </TouchableOpacity>
     </View>
@@ -185,6 +211,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#F9F9F9',
+  },
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
   },
   input: {
     height: 40,
@@ -192,36 +225,36 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+    backgroundColor: '#FFFFFF',
   },
-  dropdownButton: {
-    backgroundColor: '#007AFF',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
+  descriptionInput: {
+    height: 80,
+    textAlignVertical: 'top',
   },
-  dropdownButtonText: {
-    color: 'white',
+  mapButton: {
+    backgroundColor: '#FFB86F',
+    borderRadius: 10,
+    paddingVertical: 12,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  guestListContainer: {
+    marginTop: 20,
+  },
+  label: {
     fontSize: 16,
     fontWeight: 'bold',
+    marginBottom: 10,
   },
-  dropdownContainer: {
-    backgroundColor: '#FFF',
-    borderColor: '#CCC',
-    borderWidth: 1,
-    borderRadius: 5,
+  multiSelect: {
     marginTop: 10,
   },
-  dropdownItem: {
-    padding: 10,
-    backgroundColor: '#FFF',
-    borderBottomColor: '#CCC',
-    borderBottomWidth: 1,
+  selectedItemsText: {
+    color: '#333',
+    fontWeight: 'bold',
   },
-  dropdownItemText: {
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#007AFF',
+  saveButton: {
+    backgroundColor: '#FF6F61',
     borderRadius: 10,
     paddingVertical: 12,
     marginTop: 20,
@@ -232,13 +265,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-
   error: {
     color: 'red',
     fontSize: 16,
     marginBottom: 10,
   },
-
+  signOutButton: {
+    padding: 10,
+  },
   signOutButtonText: {
     color: 'white',
     fontSize: 16,

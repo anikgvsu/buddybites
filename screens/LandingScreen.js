@@ -17,11 +17,12 @@ const LandingScreen = () => {
     <View style={styles.container}>
       <View style={styles.background} />
       <View style={styles.content}>
+        <Text style={styles.title}>Welcome to BuddyBites</Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleSignUpPress}>
+          <TouchableOpacity style={styles.buttonSignUp} onPress={handleSignUpPress}>
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
+          <TouchableOpacity style={styles.buttonLogin} onPress={handleLoginPress}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -44,20 +45,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#333333',
+  },
   buttonContainer: {
     alignItems: 'center',
   },
-  button: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  buttonSignUp: {
+    backgroundColor: '#FF6347',
     borderRadius: 10,
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 20,
-    marginVertical: 10,
+    marginBottom: 12,
+  },
+  buttonLogin: {
+    backgroundColor: '#35C692',
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
   },
   buttonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+    textTransform: 'uppercase',
   },
 });
 

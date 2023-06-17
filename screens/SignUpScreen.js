@@ -4,10 +4,10 @@ import { View, TextInput, StyleSheet, Text, TouchableOpacity } from 'react-nativ
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 import {
-  initUserDB,
-  setupUserListener,
+  getAllUsers,
+  initFirebase,
   storeUserItem,
-} from "../helpers/fb-user";
+} from "../helpers/fb-db";
 
 const SignUpScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -18,18 +18,15 @@ const SignUpScreen = ({ navigation }) => {
   const [favoriteFoods, setFavoriteFoods] = useState('');
   const [dietHabit, setDietHabit] = useState('');
 
-  const[user, setUser] = useState([]);
-
-  // console.log(user);
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
     try {
-      initUserDB();
+      initFirebase();
     } catch (err) {
       console.log(err);
     }
-    setupUserListener((items) => {
-      // console.log(items);
+    getAllUsers((items) => {
       setUser(items);
     });
   }, []);
@@ -47,11 +44,11 @@ const SignUpScreen = ({ navigation }) => {
   const validateName = (value) => {
     return value ? '' : 'Name is required';
   };
-  
+
   const validateUsername = (value) => {
     return value ? '' : 'Username is required';
   };
-  
+
   const validatePassword = (value) => {
     if (!value) {
       return 'Password is required';
@@ -61,26 +58,24 @@ const SignUpScreen = ({ navigation }) => {
     }
     return '';
   };
-  
+
   const validateEmail = (value) => {
     return value ? '' : 'Email is required';
   };
-  
+
   const validateAllergy = (value) => {
-    return value ? '' : 'Allergy is required';
+    return true;
   };
-  
+
   const validateFavoriteFoods = (value) => {
     return value ? '' : 'Favorite Foods is required';
   };
-  
+
   const validateDietHabit = (value) => {
     return value ? '' : 'Diet Habit is required';
   };
-  
 
   const handleSignUp = () => {
-
     const isDuplicateUsername = user.some((item) => item.username === username);
     if (isDuplicateUsername) {
       setError((prevError) => ({
@@ -106,7 +101,7 @@ const SignUpScreen = ({ navigation }) => {
     const allergyError = validateAllergy(allergy);
     const favoriteFoodsError = validateFavoriteFoods(favoriteFoods);
     const dietHabitError = validateDietHabit(dietHabit);
-  
+
     setError({
       name: nameError,
       username: usernameError,
@@ -116,7 +111,7 @@ const SignUpScreen = ({ navigation }) => {
       favoriteFoods: favoriteFoodsError,
       dietHabit: dietHabitError,
     });
-  
+
     if (
       !nameError &&
       !usernameError &&
@@ -126,38 +121,34 @@ const SignUpScreen = ({ navigation }) => {
       !favoriteFoodsError &&
       !dietHabitError
     ) {
-      
-
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Signed in 
+          // Signed in
           const user = userCredential.user;
-          console.log('user signed in');
+          console.log('User signed in');
           console.log(user);
 
           storeUserItem({
             name: name,
             username: username,
-            password: password,
+            // password: password,
             email: email,
             allergy: allergy,
             favoriteFoods: favoriteFoods,
             dietHabit: dietHabit,
-            uid: user.uid
+            uid: user.uid,
           });
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(error);
-          // ..
         });
+
       navigation.navigate('Login');
     }
   };
-  
 
   return (
     <View style={styles.container}>
@@ -230,16 +221,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#fff',
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#ddd',
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+    borderRadius: 5,
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF6F61',
     borderRadius: 10,
     paddingVertical: 12,
     marginTop: 20,
@@ -256,7 +249,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
   },
-  
 });
 
 export default SignUpScreen;

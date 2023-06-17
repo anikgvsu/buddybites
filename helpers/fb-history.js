@@ -10,6 +10,7 @@ import {
 import { firebaseConfig } from "./fb-credentials";
 import { initializeApp } from "firebase/app";
 
+
 export function initHistoryDB() {
   initializeApp(firebaseConfig);
 }
