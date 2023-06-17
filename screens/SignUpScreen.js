@@ -58,7 +58,7 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   const validateAllergy = (value) => {
-    return value ? '' : 'Allergy is required';
+    return true;
   };
 
   const validateFavoriteFoods = (value) => {
