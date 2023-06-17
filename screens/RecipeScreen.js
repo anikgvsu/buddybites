@@ -64,6 +64,15 @@ const RecipeScreen = ({ navigation, route }) => {
           <Text style={styles.headerButton}>Event List</Text>
         </TouchableOpacity>
       ),
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Map")
+          }
+        >
+          <Text style={styles.headerButton}>Map</Text>
+        </TouchableOpacity>
+      ),
     });
   });
 

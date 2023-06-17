@@ -13,6 +13,7 @@ import EventListScreen from "./screens/EventListScreen";
 import EventDetailsScreen from "./screens/EventDetailsScreen";
 import EventAddScreen from "./screens/EventAddScreen";
 import RecipeScreen from "./screens/RecipeScreen";
+import MapScreen from "./screens/MapScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -32,6 +33,7 @@ export default function App() {
         <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
         <Stack.Screen name="EventAdd" component={EventAddScreen} />
         <Stack.Screen name="Recipe" component={RecipeScreen} />
+        <Stack.Screen name="Map" component={MapScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

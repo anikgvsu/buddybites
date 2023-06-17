@@ -8,37 +8,38 @@ import { useState } from 'react';
 const AddressSearchBar = () => {
 
 
+  // return (
+  //   <GooglePlacesAutocomplete
+  //     placeholder='Search'
+  //     onPress={(data, details = null) => {
+  //       // 'details' is provided when fetchDetails = true
+  //       console.log(data, details);
+  //     }}
+  //     query={{
+  //       key: maps_KEY,
+  //       language: 'en',
+  //     }}
+  //   />
+  // );
+  
   return (
-    <GooglePlacesAutocomplete
-      placeholder='Search'
-      onPress={(data, details = null) => {
-        // 'details' is provided when fetchDetails = true
-        console.log(data, details);
+    <View style={styles.container}>
+      <MapView style={styles.map}
+      initialRegion={{
+        latitude: 37.78825,
+        longitude: -122.4324,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
       }}
-      query={{
-        key: maps_KEY,
-        language: 'en',
-      }}
-    />
+      provider="google" 
+      />
+    </View>
   );
 };
 
 export default AddressSearchBar;
 
-/* return (
-  <View style={styles.container}>
-    <MapView style={styles.map}
-    initialRegion={{
-      latitude: 37.78825,
-      longitude: -122.4324,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    }}
-    provider="google" 
-    />
-  </View>
-);
-}
+
 
 const styles = StyleSheet.create({
 container: {
@@ -48,4 +49,4 @@ map: {
   width: '100%',
   height: '100%',
 },
-}); */
+});
