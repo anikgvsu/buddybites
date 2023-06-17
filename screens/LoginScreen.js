@@ -57,11 +57,17 @@ const LoginScreen = ({ navigation }) => {
           // Signed in 
           const userUid = userCredential.user.uid;
 
-          getUsersAndEvents(userUid, (users, events) => {
-            if (users && events) {
+          getUsersAndEvents(userUid, (users, eventsAsHost, eventsAsGuest) => {
+            if (users || eventsAsHost || eventsAsGuest) {
+
+              console.log('events as host');
+              console.log(eventsAsHost);
+
+              console.log('events as guest');
+              console.log(eventsAsGuest);
 
               const guestList = users.map((item) => ({ id: item.uid, name: item.name }));
-              navigation.navigate("EventList", { guestList: guestList, events: events });
+              navigation.navigate("EventList", { guestList: guestList, eventsAsHost: eventsAsHost, eventsAsGuest: eventsAsGuest });
             } else {
               setEvent(null);
           }

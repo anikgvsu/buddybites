@@ -45,19 +45,29 @@ export function getUsersAndEvents(hostId, callback) {
       }
       
       const eventReference = ref(db, "eventData/");
+
       onValue(eventReference, (eventSnapshot) => {
-        const events = [];
+        const eventsAsHost = [];
+        const eventsAsGuest = [];
         if (eventSnapshot?.val()) {
           const fbEventObject = eventSnapshot.val();
           Object.keys(fbEventObject).forEach((key) => {
             const event = { ...fbEventObject[key], id: key };
+
+            const guestUserUids = event.guestList;
+
             if (event.hostUid === hostId) {
-              events.push(event);
+              eventsAsHost.push(event);
             }
+
+            else if ( guestUserUids.includes(hostId) ) {
+              eventsAsGuest.push(event);
+            }
+
           });
         }
         
-        callback(users, events);
+        callback(users, eventsAsHost, eventsAsGuest);
       });
     });
   }

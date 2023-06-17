@@ -6,7 +6,8 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 const EventListScreen = ({ navigation, route }) => {
 
-  const { events } = route.params ?? { events: [] };
+  const { eventsAsHost } = route.params ?? { eventsAsHost: [] };
+  const { eventsAsGuest } = route.params ?? { eventsAsGuest: [] };
   const { guestList } = route.params ?? { guestList: [] };
 
 
@@ -80,13 +81,22 @@ const EventListScreen = ({ navigation, route }) => {
   }
   return (
     <View style={styles.container}>
+      <Text>Events As Host</Text>
       <FlatList
-        data={events}
+        data={eventsAsHost}
         renderItem={renderEventItem}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.eventList}
       />
-      <Button title="Surprise Recipe" onPress={goToRecepie} />
+
+      <Text>Events As Guest</Text>
+      <FlatList
+        data={eventsAsGuest}
+        renderItem={renderEventItem}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.eventList}
+      />
+      <Button style={styles.button} title="Surprise Recipe" onPress={goToRecepie} />
     </View>
   );
 };
@@ -97,15 +107,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
-  addButton: {
-    // position: 'absolute',
-    // top: 10,
-    // right: 10,
-    // backgroundColor: '#007AFF',
-    // borderRadius: 10,
-    // paddingVertical: 8,
-    // paddingHorizontal: 16,
-    // elevation: 2,
+  button: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: '#007AFF',
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    elevation: 2,
   },
   addButtonText: {
     color: 'white',
