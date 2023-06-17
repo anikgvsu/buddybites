@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Button, Text, TouchableOpacity } from 'react-native';
 import MultiSelect from 'react-native-multiple-select';
 
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { maps_KEY } from "../api/api_key.js";
+
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 import {
@@ -156,13 +159,25 @@ const EventAddScreen = ({ navigation, route }) => {
       />
       {dateError ? <Text style={styles.error}>{dateError}</Text> : null}
 
-      <TextInput
+      {/* <TextInput
         style={styles.input}
         placeholder="Location"
         value={location}
         onChangeText={setLocation}
       />
-      {locationError ? <Text style={styles.error}>{locationError}</Text> : null}
+      {locationError ? <Text style={styles.error}>{locationError}</Text> : null} */}
+
+     <GooglePlacesAutocomplete
+      placeholder='Search Location'
+      onPress={(data, details = null) => {
+        // 'details' is provided when fetchDetails = true
+        console.log(data, details);
+      }}
+      query={{
+        key: maps_KEY,
+        language: 'en',
+      }}
+    />
 
       <View>
       <MultiSelect
