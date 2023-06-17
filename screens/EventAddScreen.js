@@ -14,6 +14,10 @@ import {
 
 const EventAddScreen = ({ navigation, route }) => {
 
+  const { locationName } = route.params ?? { locationName: '' };
+  const { locationLat } = route.params ?? { locationLat: '' };
+  const { locationLong } = route.params ?? { locationLong: '' };
+
   const { hostUid } = route.params ?? { hostUid: null };
   const { guestList } = route.params ?? { guestList: [] };
 
@@ -75,6 +79,11 @@ const EventAddScreen = ({ navigation, route }) => {
     }
 
   }, []);
+
+  const handleMapEvent = () => {
+    
+    navigation.navigate("Map");
+  };
 
   const handleSaveEvent = () => {
     // console.log(guestList)
@@ -159,25 +168,17 @@ const EventAddScreen = ({ navigation, route }) => {
       />
       {dateError ? <Text style={styles.error}>{dateError}</Text> : null}
 
-      {/* <TextInput
+      <TextInput
         style={styles.input}
         placeholder="Location"
         value={location}
         onChangeText={setLocation}
       />
-      {locationError ? <Text style={styles.error}>{locationError}</Text> : null} */}
+      {locationError ? <Text style={styles.error}>{locationError}</Text> : null}
 
-     <GooglePlacesAutocomplete
-      placeholder='Search Location'
-      onPress={(data, details = null) => {
-        // 'details' is provided when fetchDetails = true
-        console.log(data, details);
-      }}
-      query={{
-        key: maps_KEY,
-        language: 'en',
-      }}
-    />
+      <TouchableOpacity style={styles.button} onPress={handleMapEvent}>
+        <Text style={styles.buttonText}>Add Location from Map</Text>
+      </TouchableOpacity>
 
       <View>
       <MultiSelect
