@@ -64,6 +64,19 @@ const RecepieScreen = ({ navigation }) => {
           </TouchableOpacity>
         ),
       });
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Map")
+            }
+          >
+            <View style={styles.addButton}>
+              <Text style={styles.addButtonText}>Map</Text>
+            </View>
+          </TouchableOpacity>
+        ),
+      });
     });
     return (
         <View style={styles.container}>
