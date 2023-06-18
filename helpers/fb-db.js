@@ -101,7 +101,7 @@ export function getUsersAndEvents(hostId, callback) {
           // const hostName = '';
           const hostName = host.name;
 
-          console.log(hostName);
+          // console.log(hostName);
   
           const guests = guestList.map((guestUid) => {
             const guest = users[guestUid];
