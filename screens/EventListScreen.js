@@ -53,6 +53,15 @@ const EventListScreen = ({ navigation, route }) => {
         .catch((error) => console.log(error));
     };
 
+    const goToEventAdd = () => {
+
+      // console.log('guest list in event list screen');
+
+      // console.log(guestList);
+
+      navigation.navigate('EventAdd', { hostUid, guestList })
+    };
+
     navigation.setOptions({
       headerLeft: () => (
         <TouchableOpacity onPress={userSignOut}>
@@ -60,7 +69,7 @@ const EventListScreen = ({ navigation, route }) => {
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <TouchableOpacity onPress={() => navigation.navigate('EventAdd', { hostUid, guestList })}>
+        <TouchableOpacity onPress={goToEventAdd}>
           <Text style={styles.headerButton}>Add Event</Text>
         </TouchableOpacity>
       ),

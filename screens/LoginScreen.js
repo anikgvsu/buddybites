@@ -47,6 +47,11 @@ const LoginScreen = ({ navigation }) => {
 
           getUsersAndEvents(userUid, (users, eventsAsHost, eventsAsGuest) => {
             if (users || eventsAsHost || eventsAsGuest) {
+
+              // console.log('guest list');
+
+              // console.log(users);
+
               const guestList = users.map((item) => ({ id: item.uid, name: item.name }));
               navigation.navigate("EventList", { hostUid: userUid, guestList, eventsAsHost, eventsAsGuest });
             }
