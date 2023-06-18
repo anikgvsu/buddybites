@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "hw2-solution",
-    "slug": "hw2-solution",
+    "name": "buddybites",
+    "slug": "buddybites",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
