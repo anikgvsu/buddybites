@@ -24,13 +24,14 @@ const EventDetailsScreen = ({ route }) => {
     );
   }
 
-  const { title, date, location, description, guests, allergies } = event;
+  const { title, hostName, date, location, description, guests, allergies } = event;
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.contentContainer}>
           <Text style={styles.title}>{title}</Text>
+          <Text style={styles.hostName}>Host: {hostName}</Text>
           <Text style={styles.subtitle}>Date: {date}</Text>
           <Text style={styles.subtitle}>Location: {location}</Text>
           <Text style={styles.description}>{description}</Text>
@@ -81,6 +82,13 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: '#888',
     textAlign: 'center',
+  },
+  hostName: {
+    fontSize: 18,
+    marginBottom: 5,
+    color: '#888',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   description: {
     fontSize: 16,

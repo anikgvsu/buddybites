@@ -79,6 +79,7 @@ export function getUsersAndEvents(hostId, callback) {
       if (snapshot?.val()) {
         const eventData = snapshot.val();
   
+        const hostUid = eventData.hostUid;
         const guestList = eventData.guestList || [];
         const userReference = ref(db, "userData/");
   
@@ -91,6 +92,16 @@ export function getUsersAndEvents(hostId, callback) {
               users[user.uid] = user;
             });
           }
+
+          // console.log(users);
+          // console.log(hostUid);
+
+          const host = users[hostUid];
+          // console.log(host);
+          // const hostName = '';
+          const hostName = host.name;
+
+          console.log(hostName);
   
           const guests = guestList.map((guestUid) => {
             const guest = users[guestUid];
@@ -111,6 +122,7 @@ export function getUsersAndEvents(hostId, callback) {
           const allergiesString = allergies.join(", ");
 
   
+          eventData.hostName = hostName;
           eventData.guests = guests;
           eventData.allergies = allergiesString;
           callback(eventData);
