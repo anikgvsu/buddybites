@@ -18,16 +18,34 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "gvsu.cis.657.buddybites",
+      "buildNumber": "1.0.0",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
+      "package": "gvsu.cis.summer657.buddybites",
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "config": {
+        "firebase": {
+          "apiKey": "AIzaSyCr-NFrb7IFuHwwv0FLhBvIEtbbhpUaE8c",
+          "authDomain": "buddybites-c63ff.firebaseapp.com",
+          "databaseURL": "https://buddybites-c63ff-default-rtdb.firebaseio.com",
+          "projectId": "buddybites-c63ff",
+          "storageBucket": "buddybites-c63ff.appspot.com",
+          "messagingSenderId": "13198154437",
+          "appId": "1:13198154437:web:cc8a629d3698297ec5eeac",
+          "measurementId": "G-N8NTE1YZJT"
+        }
+      }
     }
   }
 }

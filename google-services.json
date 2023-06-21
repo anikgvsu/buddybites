@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "13198154437",
+    "firebase_url": "https://buddybites-c63ff-default-rtdb.firebaseio.com",
+    "project_id": "buddybites-c63ff",
+    "storage_bucket": "buddybites-c63ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13198154437:android:30df545bf2dacf98c5eeac",
+        "android_client_info": {
+          "package_name": "gvsu.cis.summer657.buddybites"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13198154437-m2s4uu34diqpq6pcoe4p973tgnjkm2sm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAf1qHNX1w-7SFj4NXW6Xij-U9krD1IV94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13198154437-m2s4uu34diqpq6pcoe4p973tgnjkm2sm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "13198154437-mr6prphmrn5ri8n7kp08hqi4qle86743.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "gvsu.cis.657.buddybites"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
